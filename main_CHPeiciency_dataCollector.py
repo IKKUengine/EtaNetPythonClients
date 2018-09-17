@@ -2,6 +2,7 @@ import time
 import serial
 from threading import Thread
 from tkinter import *
+import RPi.GPIO as GPIO
 
 
 #ToDo: Überblicksdokumentation
@@ -13,6 +14,7 @@ class guiApplication(Frame):
 
     #Members
     textPower = 'Hallo IKKUengine!'
+    textSignal = ''
     
 
 
@@ -28,19 +30,31 @@ class guiApplication(Frame):
     def __init__(self, master=None):
         
         #Hardware Init
-
+        GPIO.setmode(GPIO.BOARD)
+        GPIO.setwarnings(False)
+        GPIO.setup(12, GPIO.OUT)
+        
+        if GPIO.input(12):
+            self.textSignal = 'CHP is ON at Start'
+        else:
+            self.textSignal = 'CHP is OFF at Start' 
               
         #GUI Init
         #self.requestPowerAnalyzer()
         self.infoText= Label(master, text=self.textPower, fg="red")
         self.infoText.place(relx=0.5, rely = 0.5, anchor= CENTER)
+        self.signalText = Label(master, text=self.textSignal, bg="yellow")
+        self.signalText.place(relx=0.99, rely = 0.001, anchor= NE)
         Button(master, text = 'Messen', width=20, command = self.requestPowerAnalyzer).place(relx=0.8, rely = 0.98, anchor= SE)
         Button(master, text = 'Schließen', width=20, command = root.destroy).place(relx=0.98, rely = 0.98, anchor= SE) 
         
         Frame.__init__(self, master)
 
         
-                
+    def __exit__(self, master):
+         GPIO.cleanup()
+
+    
     def requestPowerAnalyzer(self):
     
         #t=Thread(target=self.masurementRunning, args=()).start()
@@ -103,7 +117,13 @@ class guiApplication(Frame):
         self.infoText['text'] = 'Time/Date muss noch implementiert werden...'
 
     def setOnOffCHP(self):
-        self.infoText['text'] = 'ON/OFF BHKW muss noch implementiert werden...'
+        if GPIO.input(12):
+            self.signalText['text'] = 'CHP is OFF'
+        else:
+            self.signalText['text'] = 'CHP is ON'
+
+        GPIO.output(12, not GPIO.input(12)) 
+       # self.onOff_button = Button(master, text = 'Toggle', width=20, command = self.relais).place(relx=0.5, rely = 0.5, anchor= CENTER)
 
 
     def requestWeatherData(self):
@@ -115,7 +135,6 @@ class guiApplication(Frame):
         
     def masurementRunning(self):
         self.infoText['text'] = 'Die Messung läuft! Bitte warten...'
-
 
 
 
