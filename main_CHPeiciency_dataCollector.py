@@ -12,7 +12,7 @@ from tkinter import *
 class guiApplication(Frame):
 
     #Members
-    textPower = 'Anwendung wird gestartet...'
+    textPower = 'Hallo IKKUengine!'
     
 
 
@@ -33,9 +33,9 @@ class guiApplication(Frame):
         #GUI Init
         #self.requestPowerAnalyzer()
         self.infoText= Label(master, text=self.textPower, fg="red")
-        self.infoText.grid(row = 0)
-        Button(master, text = 'Messen', width=20, command = self.requestPowerAnalyzer).grid(row = 1, column = 0)
-        Button(master, text = 'Schließen', width=20, command = root.destroy).place(relx=0.98, rely = 0.98, anchor= SE) #grid(row = 1, column = 1)
+        self.infoText.place(relx=0.5, rely = 0.5, anchor= CENTER)
+        Button(master, text = 'Messen', width=20, command = self.requestPowerAnalyzer).place(relx=0.8, rely = 0.98, anchor= SE)
+        Button(master, text = 'Schließen', width=20, command = root.destroy).place(relx=0.98, rely = 0.98, anchor= SE) 
         
         Frame.__init__(self, master)
 
@@ -43,7 +43,8 @@ class guiApplication(Frame):
                 
     def requestPowerAnalyzer(self):
     
-        self.ser.write(str.encode('FORM:PH L1\n'))
+        #t=Thread(target=self.masurementRunning, args=()).start()
+        #self.ser.write(str.encode('FORM:PH L1\n'))
         self.ser.write(str.encode('VOLT:RMS:AC?\n'))
         #ser.write(str.encode('CURR:RMS:AC?\n'))
         #ser.write(str.encode('POW:FAC:AC?\n'))       
@@ -89,25 +90,56 @@ class guiApplication(Frame):
 
         self.ser.close
     
-    def requestGasMassFlow():
-        pass
+    def requestGasMassFlow(self):
+        self.infoText['text'] = 'Gas Mass Flow muss noch implementiert werden...'
 
-    def requestHeatMeter():
-        pass
+    def requestHeatMeterHotWater(self):
+        self.infoText['text'] = 'Heat Meter 2 (Warmwasser) muss noch implementiert werden...'
 
-    def requestTime():
-        pass
+    def requestHeatMeterHeatingWater(self):
+        self.infoText['text'] = 'Heat Meter 1 (Heizwasser) muss noch implementiert werden...'
 
-    def setOnOffBHKW():
-        pass
+    def requestTimeDate(self):
+        self.infoText['text'] = 'Time/Date muss noch implementiert werden...'
 
-    def requestWeatherData():
-        pass
+    def setOnOffCHP(self):
+        self.infoText['text'] = 'ON/OFF BHKW muss noch implementiert werden...'
+
+
+    def requestWeatherData(self):
+        self.infoText['text'] = 'Weather Data muss noch implementiert werden...'
+
+    
+    def saveData(self):
+        self.infoText['text'] = 'Save Data muss noch implementiert werden...'
+        
+    def masurementRunning(self):
+        self.infoText['text'] = 'Die Messung läuft! Bitte warten...'
+
 
 
 
 root = Tk()
+menu_bar = Menu(root)
 window = guiApplication(master = root)
+main_menu = Menu(menu_bar, tearoff=0)
+measure_menu = Menu(menu_bar, tearoff=0)
+controlling_menu = Menu(menu_bar, tearoff=0)
+measure_menu.add_command(label="Power Analyzer", command=window.requestPowerAnalyzer)
+measure_menu.add_command(label="Gas Mass Flow", command=window.requestGasMassFlow)
+measure_menu.add_command(label="Heat Meter 1", command=window.requestHeatMeterHeatingWater)
+measure_menu.add_command(label="Heat Meter 2", command=window.requestHeatMeterHotWater)
+measure_menu.add_command(label="Weather Data", command=window.requestWeatherData)
+measure_menu.add_command(label="Time/Date", command=window.requestTimeDate)
+controlling_menu.add_command(label="On/Off CHP", command=window.setOnOffCHP)
+main_menu.add_command(label="Save Data", command=window.saveData)
+main_menu.add_command(label="Quit", command=root.destroy)
+
+menu_bar.add_cascade(label="Menu", menu = main_menu)
+menu_bar.add_cascade(label="Single Measurement", menu = measure_menu)
+menu_bar.add_cascade(label="Controlling", menu = controlling_menu)
+
+root.config(menu=menu_bar)
 root.attributes('-fullscreen',True)
 window.mainloop()
 
