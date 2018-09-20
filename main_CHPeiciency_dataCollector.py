@@ -4,7 +4,7 @@ from threading import Thread
 from tkinter import *
 import RPi.GPIO as GPIO
 import Adafruit_ADS1x15
-
+import meterbus
 
 
 #ToDo: Überblicksdokumentation
@@ -148,6 +148,23 @@ class guiApplication(Frame):
 
     def requestHeatMeterHotWater(self):
         self.infoText['text'] = 'Heat Meter 2 (Warmwasser) muss noch implementiert werden...'
+        data = "\x68\x6A\x6A\x68\x08\x01\x72\x43\x53\x93\x07\x65" \
+       "\x32\x10\x04\xCA\x00\x00\x00\x0C\x05\x14\x00\x00" \
+       "\x00\x0C\x13\x13\x20\x00\x00\x0B\x22\x01\x24\x03" \
+       "\x04\x6D\x12\x0B\xD3\x12\x32\x6C\x00\x00\x0C\x78" \
+       "\x43\x53\x93\x07\x06\xFD\x0C\xF2\x03\x01\x00\xF6" \
+       "\x01\x0D\xFD\x0B\x05\x31\x32\x4D\x46\x57\x01\xFD" \
+       "\x0E\x00\x4C\x05\x14\x00\x00\x00\x4C\x13\x13\x20" \
+       "\x00\x00\x42\x6C\xBF\x1C\x0F\x37\xFD\x17\x00\x00" \
+       "\x00\x00\x00\x00\x00\x00\x02\x7A\x25\x00\x02\x78" \
+       "\x25\x00\x3A\x16"
+        
+        data2 = "ich will sehen" \
+                "was passiert"
+
+        telegram = meterbus.load(data)
+        self.infoText['text'] = str(telegram.records[10].parsed_value)
+        self.infoText['text'] = str(data2)
 
     def requestHeatMeterHeatingWater(self):
         self.infoText['text'] = 'Heat Meter 1 (Heizwasser) muss noch implementiert werden...'
