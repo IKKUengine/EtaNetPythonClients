@@ -1,23 +1,20 @@
 import time
 import threading
-#import serial
+import serial
 
 class Rs232Connection(threading.Thread):
-
-
-
+    
     exit = True
     stop = True
 
-    __ser = 1
-    #     = serial.Serial(
-    #     port='/dev/ttyS0',  # Open RPI buit-in serial port
-    #     baudrate=9600,
-    #     parity=serial.PARITY_NONE,
-    #     stopbits=serial.STOPBITS_ONE,
-    #     bytesize=serial.EIGHTBITS,
-    #     timeout=1
-    # )
+    __ser = serial.Serial(
+         port='/dev/ttyS0',  # Open RPI buit-in serial port
+         baudrate=9600,
+         parity=serial.PARITY_NONE,
+         stopbits=serial.STOPBITS_ONE,
+         bytesize=serial.EIGHTBITS,
+         timeout=1
+     )
 
     def __init__(self):
         threading.Thread.__init__(self)

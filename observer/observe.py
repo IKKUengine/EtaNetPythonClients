@@ -18,13 +18,5 @@ class Observable:
         self.__data.clear()
         for observer in self.__observers:
             self.__data.append(observer.notify())
-        print (self.__data)
+        print (self.__data) #Sent data 
 
-
-    # def notify_observers(self, message):
-    #     for observer in self.__observers:
-    #         #rückgabe werte füllen in data[] liste
-    #         #self.dataList[i] =
-    #         observer.notify(self, message)
-    #         pass
-    #     #return self.dataList
