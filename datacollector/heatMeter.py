@@ -1,17 +1,23 @@
 
-#import meterbus
+import meterbus
 from connections import networkConnection
 from observer import observe
 
-class HeatMeter(networkConnection.NetworkConnection, observe.Observer):
+class HeatMeter(networkConnection.Client, observe.Observer):
 
-    dataStr = "(TimeStamp; SensorName; Value; Unit; Value; Unit; ...)"
+    dataStr = "(TimeStamp; Heat Meter; Value1; Unit1; Value2; Unit2)"
 
-    def notify(self, message):
+    def __init__(self, observable):
+       # rs232Connection.Rs232Connection.__init__()
+        #observe.Observer.__init__(observable)
+        networkConnection.Client.__init__(self, '192.168.178.66', 10001)
+        observe.Observer.__init__(self, observable)
+
+    def notify(self):
         return self.dataStr
 
     def request(self):
-        self.infoText['text'] = 'Heat Meter 2 (Warmwasser) muss noch implementiert werden...'
+        #self.infoText['text'] = 'Heat Meter 2 (Warmwasser) muss noch implementiert werden...'
         data = "\x68\x6A\x6A\x68\x08\x01\x72\x43\x53\x93\x07\x65" \
                "\x32\x10\x04\xCA\x00\x00\x00\x0C\x05\x14\x00\x00" \
                "\x00\x0C\x13\x13\x20\x00\x00\x0B\x22\x01\x24\x03" \
@@ -47,8 +53,8 @@ class HeatMeter(networkConnection.NetworkConnection, observe.Observer):
                 "\x02\x61\x00\x00\x04\x2D\x00\x00\x00\x00\x04\x3B\x00\x00\x00\x00\x04\x6D\x1A" \
                 "\x0A\x59\x29\x04\x26\x44\x18\x00\x00\x02\xFD\x17\x00\x00\x1F\x9F\x16"
 
-       # telegram = meterbus.load(data3)
-        self.infoText['text'] = str(telegram.records[0].interpreted) + "\n" \
+        telegram = meterbus.load(data3)
+        print (str(telegram.records[0].interpreted) + "\n" \
                                 + str(telegram.records[1].interpreted) + "\n" \
                                 + str(telegram.records[2].interpreted) + "\n" \
                                 + str(telegram.records[3].interpreted) + "\n" \
@@ -64,5 +70,6 @@ class HeatMeter(networkConnection.NetworkConnection, observe.Observer):
                                 + str(telegram.records[13].interpreted) + "\n" \
                                 + str(telegram.records[14].interpreted) + "\n" \
                                 + str(telegram.records[15].interpreted) + "\n" \
-                                + str(telegram.records[16].interpreted)
+                                + str(telegram.records[16].interpreted))
 
+        #getData() 

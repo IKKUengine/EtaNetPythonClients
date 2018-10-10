@@ -12,10 +12,11 @@ class Gui(Frame):
     textSignal = ''
 
     def __init__(self):
-        self.netConn = etaNet.NetworkConnection('', 5005)
+        self.netConn = etaNet.Client()
         self.powerAn = powerAnalyzer.PowerAnalyzer(self.netConn)
         self.massFlow = gasMassFlow.MassFlow(self.netConn)
         self.relais = relaisRemoteSwitches.RemoteSwitches(self.netConn)
+        self.heatMeater1 = heatMeter.HeatMeter(self.netConn)
         # subject.notify_observers('done')
         # GUI Init
         # self.requestPowerAnalyzer()
@@ -53,13 +54,17 @@ class Gui(Frame):
     def stopMeasure(self):
         self.powerAn.setStop()
         self.massFlow.setStop()
+        self.heatMeater1.setStop()
         
     def startMeasure(self):
         self.powerAn.setStart()
-        self.massFlow.setStart()        
+        self.massFlow.setStart()
+        self.heatMeater1.setStart()
         
     def __exit__(self):
         self.powerAn.setExit()
         self.massFlow.setExit()
+        self.heatMeater1.setExit()
+        self.heatMeater1.__exit__()
         #self.relais.__exit()
         self.netConn.__exit__()
