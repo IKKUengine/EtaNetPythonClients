@@ -1,43 +1,28 @@
-import RPi.GPIO as GPIO
 import threading
-
+import RPi.GPIO as GPIO
 class GbioRpiConnection(threading.Thread):
     
     exit = True
     stop = True
     
-    def __init__(self):
+    def __init__(self, portNumber = 12, portType = GPIO.OUT):
         threading.Thread.__init__(self)
-        #GPIO.setmode(GPIO.BOARD)
-        #GPIO.setwarnings(False)
-        #GPIO.setup(12, GPIO.OUT)
-
-    #    if GPIO.input(12):
-    #        self.textSignal = 'CHP is ON at Start'
-    #    else:
-    #        self.textSignal = 'CHP is OFF at Start'
-        print("init GBIOs")
         threading.Thread.start(self)
+        GPIO.setmode(GPIO.BOARD)
+        GPIO.setwarnings(False)
+        GPIO.setup(portNumber, portType)
+        print("init GBIOs")
 
     def run(self):
-        #self.lock.acquire()
-        while self.exit:#threat wird erst beendet wenn aus while schleife herausgeganen wird
-            if self.stop:
-                self.request()
-            time.sleep(1)
-            #self.lock.release()
+        self.request()
 
+    def setRelais(self):
+        #if GPIO.input(12):
+            #self.signalText['text'] = 'CHP is OFF'
+        #else:
+            #self.signalText['text'] = 'CHP is ON'
+        GPIO.output(12, not GPIO.input(12))
+    
     def request(self):
         pass
-
-    def getSerialPort(self):
-        return self.__ser
-
-    def setStop(self):
-        self.stop = False
-
-    def setStart(self):
-        self.stop = True
-
-    def setExit(self):
-        self.exit = False
+    

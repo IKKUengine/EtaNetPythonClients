@@ -4,7 +4,6 @@ from connections import rs232Connection
 
 class PowerAnalyzer(rs232Connection.Rs232Connection, observe.Observer):
 
-
     dataStr = "(TimeStamp; Power Analyser; Value1; Unit1; Value2; Unit2)"
 
     def __init__(self, observable):

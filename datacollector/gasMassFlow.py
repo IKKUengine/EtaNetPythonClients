@@ -2,12 +2,18 @@
 from connections import i2cAdafruitConnection
 from observer import observe
 
-class PowerAnalyzer(i2cAdafruitConnection.I2cAdafruitConnection, observe.Observer):
+class MassFlow(i2cAdafruitConnection.I2cAdafruitConnection, observe.Observer):
 
-    dataStr = "(TimeStamp; SensorName; Value; Unit; Value; Unit; ...)"
+    dataStr = "(TimeStamp; Gas Mass Flow; Value1; Unit1; Value2; Unit2)"
+
+    def __init__(self, observable):
+       # rs232Connection.Rs232Connection.__init__()
+        #observe.Observer.__init__(observable)
+        i2cAdafruitConnection.I2cAdafruitConnection.__init__(self)
+        observe.Observer.__init__(self, observable)
 
     def notify(self):
-        return self.dataStr
+      return self.dataStr
 
     def request(self):
         # Read all the ADC channel values in a list.
@@ -28,4 +34,4 @@ class PowerAnalyzer(i2cAdafruitConnection.I2cAdafruitConnection, observe.Observe
 
         # Calculation and calibration of the gas fuel flow
         fuelflow = (values[0]) / (2 * 3276.8) * 4.2 * 0.046166667
-        self.infoText['text'] = str(fuelflow)
+        print (str(fuelflow))

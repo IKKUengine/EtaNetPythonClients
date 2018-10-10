@@ -2,6 +2,9 @@
 from tkinter import *
 from connections import networkConnection as etaNet
 from datacollector import powerAnalyzer
+from datacollector import gasMassFlow
+from datacollector import heatMeter
+from controlling import relaisRemoteSwitches
 
 class Gui(Frame):
     # Members
@@ -9,8 +12,10 @@ class Gui(Frame):
     textSignal = ''
 
     def __init__(self):
-        self.subject = etaNet.NetworkConnection('', 5006)
-        self.powerAn = powerAnalyzer.PowerAnalyzer(self.subject)
+        self.netConn = etaNet.NetworkConnection('', 5005)
+        self.powerAn = powerAnalyzer.PowerAnalyzer(self.netConn)
+        self.massFlow = gasMassFlow.MassFlow(self.netConn)
+        self.relais = relaisRemoteSwitches.RemoteSwitches(self.netConn)
         # subject.notify_observers('done')
         # GUI Init
         # self.requestPowerAnalyzer()
@@ -20,9 +25,9 @@ class Gui(Frame):
         self.infoText.place(relx=0.5, rely=0.5, anchor=CENTER)
         self.signalText = Label(master, text=self.textSignal, bg="yellow")
         self.signalText.place(relx=0.99, rely=0.001, anchor=NE)
-        Button(master, text='Datan abholen', width=20, command=self.subject.notify_observers).place(relx=0.2, rely=0.98,anchor=SE)
-        Button(master, text='PA Messen beenden', width=20, command=self.powerAn.setStop).place(relx=0.8, rely=0.98, anchor=SE)
-        Button(master, text='PA Messen starten', width=20, command=self.powerAn.setStart).place(relx=0.5, rely=0.98, anchor=SE)
+        Button(master, text='Datan abholen', width=20, command=self.netConn.notify_observers).place(relx=0.2, rely=0.98,anchor=SE)
+        Button(master, text='PA Messen beenden', width=20, command=self.stopMeasure).place(relx=0.8, rely=0.98, anchor=SE)
+        Button(master, text='PA Messen starten', width=20, command=self.startMeasure).place(relx=0.5, rely=0.98, anchor=SE)
         Button(master, text='Schließen', width=20, command=master.destroy).place(relx=0.98, rely=0.98, anchor=SE)
 
         main_menu = Menu(menu_bar, tearoff=0)
@@ -34,7 +39,7 @@ class Gui(Frame):
         # measure_menu.add_command(label="Heat Meter 2", command=window.requestHeatMeterHotWater)
         # measure_menu.add_command(label="Weather Data", command=self.requestWeatherData)
         # measure_menu.add_command(label="Time/Date", command=self.requestTimeDate)
-        #controlling_menu.add_command(label="On/Off CHP", command=self.setOnOffCHP)
+        controlling_menu.add_command(label="On/Off CHP", command=self.relais.setRelais)
         #main_menu.add_command(label="Save Data", command=self.saveData)
         main_menu.add_command(label="Quit", command=master.destroy)
 
@@ -45,6 +50,16 @@ class Gui(Frame):
         #master.attributes('-fullscreen', True)
         Frame.__init__(self, master)
 
+    def stopMeasure(self):
+        self.powerAn.setStop()
+        self.massFlow.setStop()
+        
+    def startMeasure(self):
+        self.powerAn.setStart()
+        self.massFlow.setStart()        
+        
     def __exit__(self):
         self.powerAn.setExit()
-        self.subject.__exit__()
+        self.massFlow.setExit()
+        #self.relais.__exit()
+        self.netConn.__exit__()

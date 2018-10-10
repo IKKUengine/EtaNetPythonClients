@@ -1,3 +1,4 @@
+import time
 import threading
 import Adafruit_ADS1x15
 
@@ -16,7 +17,6 @@ class I2cAdafruitConnection(threading.Thread):
     #  -  16 = +/-0.256V
     # See table 3 in the ADS1015/ADS1115 datasheet for more info on gain.
     GAIN = 1
-
 
     def __init__(self):
 
@@ -41,9 +41,6 @@ class I2cAdafruitConnection(threading.Thread):
 
     def request(self):
         pass
-
-    def getSerialPort(self):
-        return self.__ser
 
     def setStop(self):
         self.stop = False

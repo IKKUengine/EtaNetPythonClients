@@ -21,7 +21,6 @@ class Rs232Connection(threading.Thread):
         print("init rs232")
         threading.Thread.start(self)
 
-
     def run(self):
         #self.lock.acquire()
         while self.exit:#threat wird erst beendet wenn aus while schleife herausgeganen wird
@@ -44,6 +43,5 @@ class Rs232Connection(threading.Thread):
 
     def setExit(self):
         self.exit = False
-
 
 
