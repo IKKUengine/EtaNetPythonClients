@@ -12,11 +12,11 @@ class Gui(Frame):
     textSignal = ''
 
     def __init__(self):
-        self.netConn = etaNet.Client()
+        self.netConn = etaNet.Server()
         self.powerAn = powerAnalyzer.PowerAnalyzer(self.netConn)
         self.massFlow = gasMassFlow.MassFlow(self.netConn)
         self.relais = relaisRemoteSwitches.RemoteSwitches(self.netConn)
-        self.heatMeater1 = heatMeter.HeatMeter(self.netConn)
+        self.heatMeater1 = heatMeter.HeatMeter(self.netConn, 1)
         # subject.notify_observers('done')
         # GUI Init
         # self.requestPowerAnalyzer()
