@@ -1,3 +1,5 @@
+import error
+
 class Observer:
     def __init__(self, observable):
         observable.register_observer(self)
@@ -18,5 +20,6 @@ class Observable:
         self.__data.clear()
         for observer in self.__observers:
             self.__data.append(observer.notify())
-        print (self.__data) #Sent data 
+        if error.printMessages:    
+            print (self.__data) #Sent data 
 

@@ -1,4 +1,4 @@
-
+import error
 import meterbus
 from connections import networkConnection
 from observer import observe
@@ -20,8 +20,10 @@ class HeatMeter(networkConnection.MBusConnection, observe.Observer):
     def request(self):
         #self.infoText['text'] = 'Heat Meter 2 (Warmwasser) muss noch implementiert werden...'
         
+        
         data4 = self.getAllData(self.addr)
-        print (data4)
+        if error.printMessages:
+            print (data4)
         
         data = "\x68\x6A\x6A\x68\x08\x01\x72\x43\x53\x93\x07\x65" \
                "\x32\x10\x04\xCA\x00\x00\x00\x0C\x05\x14\x00\x00" \
@@ -62,22 +64,23 @@ class HeatMeter(networkConnection.MBusConnection, observe.Observer):
         #pirnt ("Data4: "+ data4)
 
         telegram = meterbus.load(data4)
-        print (str(telegram.records[0].interpreted) + "\n" \
-                                + str(telegram.records[1].interpreted) + "\n" \
-                                + str(telegram.records[2].interpreted) + "\n" \
-                                + str(telegram.records[3].interpreted) + "\n" \
-                                + str(telegram.records[4].interpreted) + "\n" \
-                                + str(telegram.records[5].interpreted) + "\n" \
-                                + str(telegram.records[6].interpreted) + "\n" \
-                                + str(telegram.records[7].interpreted) + "\n" \
-                                + str(telegram.records[8].interpreted) + "\n" \
-                                + str(telegram.records[9].interpreted) + "\n" \
-                                + str(telegram.records[10].interpreted) + "\n" \
-                                + str(telegram.records[11].interpreted) + "\n" \
-                                + str(telegram.records[12].interpreted) + "\n" \
-                                + str(telegram.records[13].interpreted) + "\n" \
-                                + str(telegram.records[14].interpreted) + "\n" \
-                                + str(telegram.records[15].interpreted) + "\n" \
-                                + str(telegram.records[16].interpreted))
+        if error.printMessages:
+            print (str(telegram.records[0].interpreted) + "\n" \
+                                    + str(telegram.records[1].interpreted) + "\n" \
+                                    + str(telegram.records[2].interpreted) + "\n" \
+                                    + str(telegram.records[3].interpreted) + "\n" \
+                                    + str(telegram.records[4].interpreted) + "\n" \
+                                    + str(telegram.records[5].interpreted) + "\n" \
+                                    + str(telegram.records[6].interpreted) + "\n" \
+                                    + str(telegram.records[7].interpreted) + "\n" \
+                                    + str(telegram.records[8].interpreted) + "\n" \
+                                    + str(telegram.records[9].interpreted) + "\n" \
+                                    + str(telegram.records[10].interpreted) + "\n" \
+                                    + str(telegram.records[11].interpreted) + "\n" \
+                                    + str(telegram.records[12].interpreted) + "\n" \
+                                    + str(telegram.records[13].interpreted) + "\n" \
+                                    + str(telegram.records[14].interpreted) + "\n" \
+                                    + str(telegram.records[15].interpreted) + "\n" \
+                                    + str(telegram.records[16].interpreted))
 
         #getData() 

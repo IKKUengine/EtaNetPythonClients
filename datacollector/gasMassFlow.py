@@ -1,6 +1,7 @@
 
 from connections import i2cAdafruitConnection
 from observer import observe
+import error
 
 class MassFlow(i2cAdafruitConnection.I2cAdafruitConnection, observe.Observer):
 
@@ -34,4 +35,5 @@ class MassFlow(i2cAdafruitConnection.I2cAdafruitConnection, observe.Observer):
 
         # Calculation and calibration of the gas fuel flow
         fuelflow = (values[0]) / (2 * 3276.8) * 4.2 * 0.046166667
-        print (str(fuelflow))
+        if error.printMessages:
+            print (str(fuelflow))

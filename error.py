@@ -1,0 +1,2 @@
+global printMessages
+printMessages = True

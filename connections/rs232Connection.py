@@ -1,6 +1,7 @@
 import time
 import threading
 import serial
+import error
 
 class Rs232Connection(threading.Thread):
     
@@ -18,7 +19,8 @@ class Rs232Connection(threading.Thread):
 
     def __init__(self):
         threading.Thread.__init__(self)
-        print("init rs232")
+        if error.printMessages:
+            print("init rs232")
         threading.Thread.start(self)
 
     def run(self):

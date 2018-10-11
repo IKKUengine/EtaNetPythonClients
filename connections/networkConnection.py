@@ -1,6 +1,7 @@
 import time
 import threading
 import socket
+import error
 
 from observer import observe
 
@@ -14,12 +15,16 @@ class MBusConnection(threading.Thread, observe.Observable):
         self.host = host
         self.port = port
         self.addr = primeAdress
-        print ('init MBus Connection')
-        
+        if error.printMessages:
+            print ('init MBus Connection')
         self.s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.s.connect((self.host, self.port))
-        print('Connection Mbus is done')
-        self.initDevice(primeAdress)
+        try:        
+            self.s.connect((self.host, self.port))
+            if error.printMessages:
+                print('Connection Mbus is done')
+            self.initDevice(primeAdress)
+        except:
+            print ('Connection Mbus cound not done!!!')
         threading.Thread.__init__(self)
         observe.Observable.__init__(self)
         threading.Thread.start(self)
@@ -35,10 +40,12 @@ class MBusConnection(threading.Thread, observe.Observable):
     def initDevice(self, primeAdress):
         #self.s.send("\x10\x40\x01\x41\x16".encode())
         self.s.send(self.getInitDeviceCode(self.addr).encode())
-        print('Mbus init data are sent')
+        if error.printMessages:
+            print('Mbus init data are sent')
         respond = self.s.recv(1)
         if respond == b'\xe5':
-            print('Mbus init war erfolgreich!!!')
+            if error.printMessages:
+                print('Mbus init war erfolgreich!!!')
         else:
             print('MBus init NICHT erfolgreich!!!')
 
@@ -79,16 +86,19 @@ class Server(threading.Thread, observe.Observable):
         observe.Observable.__init__(self)
         self.host = host
         self.port = port
-        print ('init Server Connection')
+        if error.printMessages:
+            print ('init Server Connection')
         threading.Thread.start(self)
 
     def run(self):
         #self.lock.acquire()
         self.s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.s.bind((self.host, self.port))
-        print ('Server Network listing')
+        if error.printMessages:
+            print ('Server Network listing')
         self.s.listen(1)
-        print('Server Connection ist done')
+        if error.printMessages:
+            print('Server Connection ist done')
         try:
             self.conn, self.addr = self.s.accept()
             # self.lock.release()
@@ -107,7 +117,8 @@ class Server(threading.Thread, observe.Observable):
             #self.s.close()
 
     def request(self):
-        print ('Connected by', self.addr)
+        if error.printMessages:
+            print ('Connected by', self.addr)
         
     def setStop(self):
         self.stop = False

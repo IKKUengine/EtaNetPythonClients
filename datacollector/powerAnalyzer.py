@@ -1,6 +1,7 @@
 
 from observer import observe
 from connections import rs232Connection
+import error
 
 class PowerAnalyzer(rs232Connection.Rs232Connection, observe.Observer):
 
@@ -16,7 +17,8 @@ class PowerAnalyzer(rs232Connection.Rs232Connection, observe.Observer):
       return self.dataStr
 
     def request(self):
-        print ("done power analyser")
+        if error.printMessages:
+            print ("done power analyser")
         # t=Thread(target=self.masurementRunning, args=()).start()
         # self.ser.write(str.encode('FORM:PH L1\n'))
         # self.ser.write(str.encode('VOLT:RMS:AC?\n'))

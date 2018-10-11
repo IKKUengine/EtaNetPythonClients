@@ -5,6 +5,7 @@ from datacollector import powerAnalyzer
 from datacollector import gasMassFlow
 from datacollector import heatMeter
 from controlling import relaisRemoteSwitches
+import error
 
 class Gui(Frame):
     # Members
@@ -48,7 +49,8 @@ class Gui(Frame):
         menu_bar.add_cascade(label="Single Measurement", menu=measure_menu)
         menu_bar.add_cascade(label="Controlling", menu=controlling_menu)
         master.config(menu=menu_bar)
-        #master.attributes('-fullscreen', True)
+        if not error.printMessages:
+            master.attributes('-fullscreen', True)
         Frame.__init__(self, master)
 
     def stopMeasure(self):
