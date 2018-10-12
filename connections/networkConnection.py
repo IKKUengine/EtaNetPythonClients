@@ -5,7 +5,7 @@ import error
 
 from observer import observe
 
-class MBusConnection(threading.Thread, observe.Observable):
+class MBusConnection(threading.Thread):
     exit = True
     stop = True
     
@@ -15,19 +15,29 @@ class MBusConnection(threading.Thread, observe.Observable):
         self.host = host
         self.port = port
         self.addr = primeAdress
-        if error.printMessages:
-            print ('init MBus Connection')
-        self.s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        try:        
+
+        try: 
+            if error.printMessages:
+                print ('init MBus Connection')
+            self.s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+          
+            if error.printMessages:
+                print ("socket successfully created")       
             self.s.connect((self.host, self.port))
             if error.printMessages:
                 print('Connection Mbus is done')
             self.initDevice(primeAdress)
-        except:
-            print ('Connection Mbus cound not done!!!')
-        threading.Thread.__init__(self)
-        observe.Observable.__init__(self)
-        threading.Thread.start(self)
+            
+            if error.printMessages:
+                host_id = self.s.getpeername()
+                print ("Addr.: " + str(host_id))
+                print ("(\'" + host + "\', " + str(port) + ")")
+                
+            threading.Thread.__init__(self)
+            threading.Thread.start(self)
+            
+        except:          
+            print("socket NOT created")
 
     def run(self):
    
@@ -79,46 +89,65 @@ class MBusConnection(threading.Thread, observe.Observable):
     def __exit__(self):
         self.s.close()
         
-class Server(threading.Thread, observe.Observable):
+class etaNetClient(threading.Thread, observe.Observable):
+    exit = True
+    stop = True
+    
+    def __init__(self, host = '192.168.178.22', port = 5005):
 
-    def __init__(self, host = '', port = 5005):
-        threading.Thread.__init__(self)
-        observe.Observable.__init__(self)
         self.host = host
         self.port = port
-        if error.printMessages:
-            print ('init Server Connection')
-        threading.Thread.start(self)
 
-    def run(self):
-        #self.lock.acquire()
-        self.s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.s.bind((self.host, self.port))
-        if error.printMessages:
-            print ('Server Network listing')
-        self.s.listen(1)
-        if error.printMessages:
-            print('Server Connection ist done')
         try:
-            self.conn, self.addr = self.s.accept()
-            # self.lock.release()
-            self.request()
+            threading.Thread.__init__(self)
+            observe.Observable.__init__(self)
+            if error.printMessages:
+                print ('init Client Connection')
+            self.s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+          
+            if error.printMessages:
+                print ("Client socket successfully created")       
             
-            #while self.exit:#threat wird erst beendet wenn aus while schleife herausgeganen wird
-            #    if self.stop:
-            #        self.request()
-            #    time.sleep(1)
-                #self.lock.release()self.request()
+            
+            if error.printMessages:
+                host_id = self.s.getpeername()
+                print ("Addr.: " + str(host_id))
+                print ("(\'" + host + "\', " + str(port) + ")")        
 
-        except:
-            print ("Fehler aufgetreten...")
-
+            threading.Thread.start(self)
+            
+        except:          
+            print("NO EtaNet Connection to the server. Please check the server or connection!")
         #finally:
             #self.s.close()
-
-    def request(self):
-        if error.printMessages:
-            print ('Connected by', self.addr)
+            
+    def run(self):
+        try:
+            self.s.connect((self.host, self.port))
+            print ("Connection etaNet is done")
+            #self.s.send("t".encode())
+        except:          
+            print("NO EtaNet Connection to the server. Please check the server or connection!")
+            #if error.printMessages:
+             #   print('Connection Client is done')
+       # while self.exit:#threat wird erst beendet wenn aus while schleife herausgeganen wird
+       #     if self.stop:
+       #         self.request()
+       #     time.sleep(1)
+       
+    def sendAllData(self):
+        message = error.systemIdentifier + ": " + str(self.getDataList())   
+        lenString = len(message)
+        if error.printMessages:  
+            print (str(lenString))
+            print (message)
+        try:
+            self.s.send(str(lenString).encode())
+            self.s.send(message.encode())
+        except:          
+            print("NO EtaNet Connection to the server. Please check the server or connection!")
+        #respond = self.s.recv(119)
+        #return respond
         
     def setStop(self):
         self.stop = False

@@ -65,6 +65,7 @@ class HeatMeter(networkConnection.MBusConnection, observe.Observer):
 
         telegram = meterbus.load(data4)
         if error.printMessages:
+            print("Adresse: " + str(self.addr))
             print (str(telegram.records[0].interpreted) + "\n" \
                                     + str(telegram.records[1].interpreted) + "\n" \
                                     + str(telegram.records[2].interpreted) + "\n" \

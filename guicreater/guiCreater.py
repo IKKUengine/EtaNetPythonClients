@@ -6,6 +6,7 @@ from datacollector import gasMassFlow
 from datacollector import heatMeter
 from controlling import relaisRemoteSwitches
 import error
+import time
 
 class Gui(Frame):
     # Members
@@ -13,11 +14,13 @@ class Gui(Frame):
     textSignal = ''
 
     def __init__(self):
-        self.netConn = etaNet.Server()
+        self.netConn = etaNet.etaNetClient()
         self.powerAn = powerAnalyzer.PowerAnalyzer(self.netConn)
         self.massFlow = gasMassFlow.MassFlow(self.netConn)
         self.relais = relaisRemoteSwitches.RemoteSwitches(self.netConn)
         self.heatMeater1 = heatMeter.HeatMeter(self.netConn, 1)
+        time.sleep(1)
+        self.heatMeater2 = heatMeter.HeatMeter(self.netConn, 2)
         # subject.notify_observers('done')
         # GUI Init
         # self.requestPowerAnalyzer()
@@ -49,24 +52,28 @@ class Gui(Frame):
         menu_bar.add_cascade(label="Single Measurement", menu=measure_menu)
         menu_bar.add_cascade(label="Controlling", menu=controlling_menu)
         master.config(menu=menu_bar)
-        if not error.printMessages:
-            master.attributes('-fullscreen', True)
+        #if not error.printMessages:
+            #master.attributes('-fullscreen', True)
         Frame.__init__(self, master)
 
     def stopMeasure(self):
         self.powerAn.setStop()
         self.massFlow.setStop()
         self.heatMeater1.setStop()
+        self.heatMeater2.setStop()
         
     def startMeasure(self):
         self.powerAn.setStart()
         self.massFlow.setStart()
         self.heatMeater1.setStart()
+        self.heatMeater2.setStart()
         
     def __exit__(self):
         self.powerAn.setExit()
         self.massFlow.setExit()
         self.heatMeater1.setExit()
         self.heatMeater1.__exit__()
+        self.heatMeater2.setExit()
+        self.heatMeater2.__exit__()
         #self.relais.__exit()
         self.netConn.__exit__()

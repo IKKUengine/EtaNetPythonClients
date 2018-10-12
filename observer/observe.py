@@ -7,11 +7,14 @@ class Observer:
     def notify(self, message):
         pass
 
-
 class Observable:
     def __init__(self):
         self.__observers = []
         self.__data = []
+    
+    def getDataList(self):
+        message = self.__data
+        return message
 
     def register_observer(self, observer):
         self.__observers.append(observer)
@@ -20,6 +23,7 @@ class Observable:
         self.__data.clear()
         for observer in self.__observers:
             self.__data.append(observer.notify())
-        if error.printMessages:    
-            print (self.__data) #Sent data 
+        self.sendAllData()
 
+    def sendAllData(self):
+        pass
