@@ -23,28 +23,30 @@ class PowerAnalyzer(rs232Connection.Rs232Connection, observe.Observer):
       return self.dataStr
 
     def request(self):
-        if parameter.printMessages:
+        if True: #parameter.printMessages:
             print ("done power analyser")
+            #For the perfomance voltage and current are only switched on for diagnostic purposes.
+            self.getSerialPort().write(str.encode('VOLT:RMS:AC?\n'))
+            data1 = self.getSerialPort().read(35)
             
-        self.getSerialPort().write(str.encode('VOLT:RMS:AC?\n'))
-        data1 = self.getSerialPort().read(35)
-        
-        self.getSerialPort().write(str.encode('CURR:RMS:AC?\n'))
-        data2 = self.getSerialPort().read(35)
+            self.getSerialPort().write(str.encode('CURR:RMS:AC?\n'))
+            data2 = self.getSerialPort().read(35)
+            
+            self.getSerialPort().write(str.encode('FREQ?\n'))
+            data4 = self.getSerialPort().read(35)
+            
+            voltList = [float(x) for x in re.findall(self.match_number, str(data1))]
+            currList = [float(x) for x in re.findall(self.match_number, str(data2))]
+            freqList = [float(x) for x in re.findall(self.match_number, str(data4))] 
         
         self.getSerialPort().write(str.encode('POW:ACT:AC?\n'))
         data3 = self.getSerialPort().read(35)
         powerTs = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-
-        self.getSerialPort().write(str.encode('FREQ?\n'))
-        data4 = self.getSerialPort().read(35)
         
-        voltList = [float(x) for x in re.findall(self.match_number, str(data1))]
-        currList = [float(x) for x in re.findall(self.match_number, str(data2))]
         powList = [float(x) for x in re.findall(self.match_number, str(data3))]
-        freqList = [float(x) for x in re.findall(self.match_number, str(data4))]    
+           
         
-        if parameter.printMessages:       
+        if True:#parameter.printMessages:       
             print ("Datetime: " + powerTs)
             print ("Voltage L1,L2,L3: " + str(voltList) + " [V]")
             print ("Current L1,L2,L3: " + str(currList) + " [A]")

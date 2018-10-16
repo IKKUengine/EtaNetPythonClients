@@ -2,6 +2,8 @@ import parameter
 import meterbus
 from connections import networkConnection
 from observer import observe
+import datetime
+import re
 
 class HeatMeter(networkConnection.MBusConnection, observe.Observer):
 
@@ -12,6 +14,8 @@ class HeatMeter(networkConnection.MBusConnection, observe.Observer):
         #observe.Observer.__init__(observable)
         networkConnection.MBusConnection.__init__(self, '192.168.178.66', 10001, primeAdress)
         observe.Observer.__init__(self, observable)
+        #Regular expression operations to find all scientific numbers
+        self.match_number = re.compile('-?\ *[0-9]+\.?[0-9]*(?:[Ee]\ *-?\ *[0-9]+)?')
         self.addr = primeAdress
 
     def notify(self):
@@ -22,6 +26,8 @@ class HeatMeter(networkConnection.MBusConnection, observe.Observer):
         
         
         data4 = self.getAllData(self.addr)
+        powerTs = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        
         if parameter.printMessages:
             print (data4)
         
@@ -59,11 +65,12 @@ class HeatMeter(networkConnection.MBusConnection, observe.Observer):
                 "\x06\x00\x00\x00\x00\x04\x13\x18\x02\x00\x00\x02\x59\xA4\x08\x02\x5D\x16\x09" \
                 "\x02\x61\x00\x00\x04\x2D\x00\x00\x00\x00\x04\x3B\x00\x00\x00\x00\x04\x6D\x1A" \
                 "\x0A\x59\x29\x04\x26\x44\x18\x00\x00\x02\xFD\x17\x00\x00\x1F\x9F\x16"
-        
-        #data4 = self.getData("")
-        #pirnt ("Data4: "+ data4)
 
         telegram = meterbus.load(data4)
+        powList = [float(x) for x in re.findall(self.match_number, str(telegram.records[12].interpreted) \
+                  + str(telegram.records[13].interpreted) + str(telegram.records[9].interpreted) \
+                  + str(telegram.records[10].interpreted))]
+        
         if parameter.printMessages:
             print("Adresse: " + str(self.addr))
             print (str(telegram.records[0].interpreted) + "\n" \
@@ -84,4 +91,6 @@ class HeatMeter(networkConnection.MBusConnection, observe.Observer):
                                     + str(telegram.records[15].interpreted) + "\n" \
                                     + str(telegram.records[16].interpreted))
 
-        #getData() 
+        self.dataStr = "({}; Heat Meter {}; {:8.6f}; {}; {:8.6f}; {}; {:8.6f}; {}; {:8.6f}; {})".format(powerTs, \
+                       self.addr, powList[0], "[W]", powList[1], "[m³/h]", powList[3], "[T_Flow]", powList[4], \
+                       "[T_Return]") 

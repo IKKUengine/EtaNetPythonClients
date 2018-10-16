@@ -140,8 +140,12 @@ class etaNetClient(threading.Thread, observe.Observable):
             print (str(lenString))
             print (message)
         try:
-            self.s.send(str(lenString).encode())
-            self.s.send(message.encode())
+            self.s.settimeout(1.0)
+            try:
+                self.s.send(str(lenString).encode())
+                self.s.send(message.encode())
+            except:
+                print ("Please switch on the Server-App!")
         except:          
             print("NO EtaNet Connection to the server. Please check the server or connection!")
         #respond = self.s.recv(119)
