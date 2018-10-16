@@ -1,4 +1,4 @@
-import error
+import parameter
 import meterbus
 from connections import networkConnection
 from observer import observe
@@ -22,7 +22,7 @@ class HeatMeter(networkConnection.MBusConnection, observe.Observer):
         
         
         data4 = self.getAllData(self.addr)
-        if error.printMessages:
+        if parameter.printMessages:
             print (data4)
         
         data = "\x68\x6A\x6A\x68\x08\x01\x72\x43\x53\x93\x07\x65" \
@@ -64,7 +64,7 @@ class HeatMeter(networkConnection.MBusConnection, observe.Observer):
         #pirnt ("Data4: "+ data4)
 
         telegram = meterbus.load(data4)
-        if error.printMessages:
+        if parameter.printMessages:
             print("Adresse: " + str(self.addr))
             print (str(telegram.records[0].interpreted) + "\n" \
                                     + str(telegram.records[1].interpreted) + "\n" \

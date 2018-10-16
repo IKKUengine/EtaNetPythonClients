@@ -1,7 +1,8 @@
 
 from connections import i2cAdafruitConnection
 from observer import observe
-import error
+import parameter
+import datetime
 
 class MassFlow(i2cAdafruitConnection.I2cAdafruitConnection, observe.Observer):
 
@@ -22,6 +23,7 @@ class MassFlow(i2cAdafruitConnection.I2cAdafruitConnection, observe.Observer):
         # for i in range(4):
         # Read the specified ADC channel using the previously set gain value.
         values[0] = self.adc.read_adc(0, gain=self.GAIN)
+        powerTs = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         # values[1] = adc.read_adc(1, gain=GAIN)
         # values[2] = adc.read_adc(2, gain=GAIN)
         # values[3] = adc.read_adc(3, gain=GAIN)
@@ -35,5 +37,10 @@ class MassFlow(i2cAdafruitConnection.I2cAdafruitConnection, observe.Observer):
 
         # Calculation and calibration of the gas fuel flow
         fuelflow = (values[0]) / (2 * 3276.8) * 4.2 * 0.046166667
-        if error.printMessages:
-            print (str(fuelflow))
+        if parameter.printMessages:
+            print ("Fuel flow [kg/h]: " + str(fuelflow))
+        self.dataStr = "({}; Gas Mass Flow; {:8.6f}; {})".format(powerTs, fuelflow, "[kg/h]")       
+        
+        
+        
+                   

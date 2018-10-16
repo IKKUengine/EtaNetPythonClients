@@ -1,7 +1,9 @@
-
 from observer import observe
 from connections import rs232Connection
-import error
+import parameter
+import datetime
+import re
+
 
 class PowerAnalyzer(rs232Connection.Rs232Connection, observe.Observer):
 
@@ -12,57 +14,43 @@ class PowerAnalyzer(rs232Connection.Rs232Connection, observe.Observer):
         #observe.Observer.__init__(observable)
         rs232Connection.Rs232Connection.__init__(self)
         observe.Observer.__init__(self, observable)
+        self.getSerialPort().write(str.encode('FORM:PH ALL\n'))
+        self.getSerialPort().write(str.encode('CURR:SC +1.0e-1\n'))
+        #Regular expression operations to find all scientific numbers
+        self.match_number = re.compile('-?\ *[0-9]+\.?[0-9]*(?:[Ee]\ *-?\ *[0-9]+)?')
 
     def notify(self):
       return self.dataStr
 
     def request(self):
-        if error.printMessages:
+        if parameter.printMessages:
             print ("done power analyser")
-        # t=Thread(target=self.masurementRunning, args=()).start()
-        # self.ser.write(str.encode('FORM:PH L1\n'))
-        # self.ser.write(str.encode('VOLT:RMS:AC?\n'))
-        # ser.write(str.encode('CURR:RMS:AC?\n'))
-        # ser.write(str.encode('POW:FAC:AC?\n'))
-        # data1 = self.ser.read(10) #Read 10 characters from serial port to data
-        #self.ser.write(str.encode('POW:ACT:AC?\n'))
-        # data2 = self.ser.read(15)
+            
+        self.getSerialPort().write(str.encode('VOLT:RMS:AC?\n'))
+        data1 = self.getSerialPort().read(35)
+        
+        self.getSerialPort().write(str.encode('CURR:RMS:AC?\n'))
+        data2 = self.getSerialPort().read(35)
+        
+        self.getSerialPort().write(str.encode('POW:ACT:AC?\n'))
+        data3 = self.getSerialPort().read(35)
+        powerTs = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
-        # ser.write(str.encode('POW:ACT:AC? FORM:PH L1?\n'))
-        # data3 = ser.read(40)
-
-        # ser.write(str.encode('POW:ACT:AC? FORM:PH L2?\n'))
-        # data4 = ser.read(40)
-
-        # ser.write(str.encode('POW:ACT:AC? FORM:PH L3?\n'))
-        # data5 = ser.read(40)
-
-        # self.ser.write(str.encode('FORM:PH L3\n'))
-
-        #self.ser.write(str.encode('VOLT:RMS:AC?\n'))
-        # ser.write(str.encode('CURR:RMS:AC?\n'))
-        # ser.write(str.encode('POW:FAC:AC?\n'))
-        #data = self.ser.read(22)  # Read 10 characters from serial port to data
-
-        # self.ser.write(str.encode('POW:ACT:AC?\n'))
-        # data5 = self.ser.read(10)
-
-        # ser.write(str.encode('POW:ACT:AC? FORM:PH L1?\n'))
-        # data3 = ser.read(40)
-
-        # ser.write(str.encode('POW:ACT:AC? FORM:PH L2?\n'))
-        # data4 = ser.read(40)
-
-        # ser.write(str.encode('POW:ACT:AC? FORM:PH L3?\n'))
-        # data5 = ser.read(40)
-
-        # ser.write(str.encode('FORM:PH L3\n'))
-        # data6 = ser.read(100)
-
-        # ser.write(str.encode('POW:ACT:AC?\n'))
-        # data3 = ser.read(100)
-
-        #self.infoText['text'] =  data
-        #self.infoText['text'] =  "test 123"
-
-        #self.ser.close
+        self.getSerialPort().write(str.encode('FREQ?\n'))
+        data4 = self.getSerialPort().read(35)
+        
+        voltList = [float(x) for x in re.findall(self.match_number, str(data1))]
+        currList = [float(x) for x in re.findall(self.match_number, str(data2))]
+        powList = [float(x) for x in re.findall(self.match_number, str(data3))]
+        freqList = [float(x) for x in re.findall(self.match_number, str(data4))]    
+        
+        if parameter.printMessages:       
+            print ("Datetime: " + powerTs)
+            print ("Voltage L1,L2,L3: " + str(voltList) + " [V]")
+            print ("Current L1,L2,L3: " + str(currList) + " [A]")
+            print ("Power L1,L2,L3: " + str(powList) + " [W]")
+            print ("Frequency L1,L2,L3: " + str(freqList) + " [Hz]")
+        
+        self.dataStr = "({}; Power Analyser; {}; {}; {}; {}; {}; {})".format(powerTs, powList[0], \
+                       "L1, [W]", powList[1], "L2, [W]", powList[2], "L3, [W]")
+        

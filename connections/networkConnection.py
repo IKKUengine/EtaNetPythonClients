@@ -1,14 +1,13 @@
 import time
 import threading
 import socket
-import error
+import parameter
 
 from observer import observe
 
 class MBusConnection(threading.Thread):
     exit = True
     stop = True
-    
 
     def __init__(self, host = '192.168.178.66', port = 10001, primeAdress = 1):
 
@@ -17,18 +16,18 @@ class MBusConnection(threading.Thread):
         self.addr = primeAdress
 
         try: 
-            if error.printMessages:
+            if parameter.printMessages:
                 print ('init MBus Connection')
             self.s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
           
-            if error.printMessages:
+            if parameter.printMessages:
                 print ("socket successfully created")       
             self.s.connect((self.host, self.port))
-            if error.printMessages:
+            if parameter.printMessages:
                 print('Connection Mbus is done')
             self.initDevice(primeAdress)
             
-            if error.printMessages:
+            if parameter.printMessages:
                 host_id = self.s.getpeername()
                 print ("Addr.: " + str(host_id))
                 print ("(\'" + host + "\', " + str(port) + ")")
@@ -44,17 +43,16 @@ class MBusConnection(threading.Thread):
         while self.exit:#threat wird erst beendet wenn aus while schleife herausgeganen wird
             if self.stop:
                 self.request()
-            time.sleep(1)
-            
-    
+            time.sleep(parameter.timeTriggerMeterbus)
+                
     def initDevice(self, primeAdress):
         #self.s.send("\x10\x40\x01\x41\x16".encode())
         self.s.send(self.getInitDeviceCode(self.addr).encode())
-        if error.printMessages:
+        if parameter.printMessages:
             print('Mbus init data are sent')
         respond = self.s.recv(1)
         if respond == b'\xe5':
-            if error.printMessages:
+            if parameter.printMessages:
                 print('Mbus init war erfolgreich!!!')
         else:
             print('MBus init NICHT erfolgreich!!!')
@@ -101,15 +99,15 @@ class etaNetClient(threading.Thread, observe.Observable):
         try:
             threading.Thread.__init__(self)
             observe.Observable.__init__(self)
-            if error.printMessages:
+            if parameter.printMessages:
                 print ('init Client Connection')
             self.s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
           
-            if error.printMessages:
+            if parameter.printMessages:
                 print ("Client socket successfully created")       
             
             
-            if error.printMessages:
+            if parameter.printMessages:
                 host_id = self.s.getpeername()
                 print ("Addr.: " + str(host_id))
                 print ("(\'" + host + "\', " + str(port) + ")")        
@@ -128,7 +126,7 @@ class etaNetClient(threading.Thread, observe.Observable):
             #self.s.send("t".encode())
         except:          
             print("NO EtaNet Connection to the server. Please check the server or connection!")
-            #if error.printMessages:
+            #if parameter.printMessages:
              #   print('Connection Client is done')
        # while self.exit:#threat wird erst beendet wenn aus while schleife herausgeganen wird
        #     if self.stop:
@@ -136,9 +134,9 @@ class etaNetClient(threading.Thread, observe.Observable):
        #     time.sleep(1)
        
     def sendAllData(self):
-        message = error.systemIdentifier + ": " + str(self.getDataList())   
+        message = parameter.systemIdentifier + ": " + str(self.getDataList())   
         lenString = len(message)
-        if error.printMessages:  
+        if parameter.printMessages:  
             print (str(lenString))
             print (message)
         try:

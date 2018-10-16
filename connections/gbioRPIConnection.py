@@ -1,6 +1,6 @@
 import threading
 import RPi.GPIO as GPIO
-import error
+import parameter
 class GbioRpiConnection(threading.Thread):
     
     exit = True
@@ -12,7 +12,7 @@ class GbioRpiConnection(threading.Thread):
         GPIO.setmode(GPIO.BOARD)
         GPIO.setwarnings(False)
         GPIO.setup(portNumber, portType)
-        if error.printMessages:
+        if parameter.printMessages:
             print("init GBIOs")
 
     def run(self):

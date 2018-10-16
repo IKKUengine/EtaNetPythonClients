@@ -1,7 +1,7 @@
 import time
 import threading
 import Adafruit_ADS1x15
-import error
+import parameter
 
 class I2cAdafruitConnection(threading.Thread):
     
@@ -29,7 +29,7 @@ class I2cAdafruitConnection(threading.Thread):
         # Note you can change the I2C address from its default (0x48), and/or the I2C
         # bus by passing in these optional parameters:
         # adc = Adafruit_ADS1x15.ADS1015(address=0x49, busnum=1)
-        if error.printMessages:
+        if parameter.printMessages:
             print("init I2C")
         threading.Thread.start(self)
 
@@ -38,7 +38,7 @@ class I2cAdafruitConnection(threading.Thread):
         while self.exit:#threat wird erst beendet wenn aus while schleife herausgeganen wird
             if self.stop:
                 self.request()
-            time.sleep(1)
+            time.sleep(parameter.timeTriggerMassFlow)
             #self.lock.release()
 
     def request(self):

@@ -1,4 +1,4 @@
-import error
+import parameter
 
 class Observer:
     def __init__(self, observable):
@@ -23,6 +23,7 @@ class Observable:
         self.__data.clear()
         for observer in self.__observers:
             self.__data.append(observer.notify())
+        print(self.__data)
         self.sendAllData()
 
     def sendAllData(self):

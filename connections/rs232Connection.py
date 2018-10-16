@@ -1,7 +1,7 @@
 import time
 import threading
 import serial
-import error
+import parameter
 
 class Rs232Connection(threading.Thread):
     
@@ -19,7 +19,7 @@ class Rs232Connection(threading.Thread):
 
     def __init__(self):
         threading.Thread.__init__(self)
-        if error.printMessages:
+        if parameter.printMessages:
             print("init rs232")
         threading.Thread.start(self)
 
@@ -28,7 +28,7 @@ class Rs232Connection(threading.Thread):
         while self.exit:#threat wird erst beendet wenn aus while schleife herausgeganen wird
             if self.stop:
                 self.request()
-            time.sleep(1)
+            time.sleep(parameter.timeTriggerPowerAnalayser)
             #self.lock.release()
 
     def request(self):
@@ -45,5 +45,6 @@ class Rs232Connection(threading.Thread):
 
     def setExit(self):
         self.exit = False
-
-
+        
+    def __exit__(self):
+        self.__ser.close
