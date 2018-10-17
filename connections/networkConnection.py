@@ -88,8 +88,10 @@ class MBusConnection(threading.Thread):
         self.s.close()
         
 class etaNetClient(threading.Thread, observe.Observable):
+    
     exit = True
     stop = True
+    messageServer = "NO SERVER CONNECTION!"
     
     def __init__(self, host = '192.168.178.22', port = 5005):
 
@@ -97,59 +99,56 @@ class etaNetClient(threading.Thread, observe.Observable):
         self.port = port
 
         try:
-            threading.Thread.__init__(self)
-            observe.Observable.__init__(self)
             if parameter.printMessages:
                 print ('init Client Connection')
             self.s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
           
             if parameter.printMessages:
-                print ("Client socket successfully created")       
-            
+                print ("Client socket successfully created")         
             
             if parameter.printMessages:
                 host_id = self.s.getpeername()
                 print ("Addr.: " + str(host_id))
                 print ("(\'" + host + "\', " + str(port) + ")")        
-
-            threading.Thread.start(self)
-            
+            observe.Observable.__init__(self)
+            threading.Thread.__init__(self)
+            threading.Thread.start(self)            
         except:          
             print("NO EtaNet Connection to the server. Please check the server or connection!")
-        #finally:
-            #self.s.close()
             
     def run(self):
         try:
             self.s.connect((self.host, self.port))
-            print ("Connection etaNet is done")
-            #self.s.send("t".encode())
+            self.s.settimeout(1.0)
+            if parameter.printMessages:
+                print ("EtaNet-Server-Connection is done")
+            self.messageServer = "Connection etaNet is done"
         except:          
-            print("NO EtaNet Connection to the server. Please check the server or connection!")
-            #if parameter.printMessages:
-             #   print('Connection Client is done')
-       # while self.exit:#threat wird erst beendet wenn aus while schleife herausgeganen wird
-       #     if self.stop:
-       #         self.request()
-       #     time.sleep(1)
+            if parameter.printMessages:
+                print("NO EtaNet Connection to the server. Please check the server or connection!")
+            self.messageServer = "NO EtaNet Connection to the server.\n Please check the server or connection!"
+            
+        while self.exit:
+            if self.stop:
+                self.notify_observers()
+                time.sleep(parameter.timeTriggerSendData)
+                self.sendAllData()
        
     def sendAllData(self):
-        message = parameter.systemIdentifier + ": " + str(self.getDataList())   
-        lenString = len(message)
+        message =  "{}: {}".format(parameter.systemIdentifier, self.getDataList()) 
+        lenString = len(message.encode('UTF-8'))
+        lenString = lenString
         if parameter.printMessages:  
-            print (str(lenString))
+            print (lenString)
             print (message)
+            
         try:
-            self.s.settimeout(1.0)
-            try:
-                self.s.send(str(lenString).encode())
-                self.s.send(message.encode())
-            except:
+            self.s.send(str(lenString).encode())
+            self.s.send(message.encode())
+        except:
+            if parameter.printMessages:
                 print ("Please switch on the Server-App!")
-        except:          
-            print("NO EtaNet Connection to the server. Please check the server or connection!")
-        #respond = self.s.recv(119)
-        #return respond
+            self.messageServer = "NO SERVER CONNECTION!"
         
     def setStop(self):
         self.stop = False
@@ -159,6 +158,9 @@ class etaNetClient(threading.Thread, observe.Observable):
 
     def setExit(self):
         self.exit = False
+    
+    def getMessageServer(self):
+        return self.messageServer
 
     def __exit__(self):
         self.s.close()

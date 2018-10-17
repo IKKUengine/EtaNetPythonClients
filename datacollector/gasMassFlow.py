@@ -39,8 +39,11 @@ class MassFlow(i2cAdafruitConnection.I2cAdafruitConnection, observe.Observer):
         fuelflow = (values[0]) / (2 * 3276.8) * 4.2 * 0.046166667
         if parameter.printMessages:
             print ("Fuel flow [kg/h]: " + str(fuelflow))
-        self.dataStr = "({}; Gas Mass Flow; {:8.6f}; {})".format(powerTs, fuelflow, "[kg/h]")       
+        try:
+            self.dataStr = "({}; Gas Mass Flow; {:8.6f}; {})".format(powerTs, fuelflow, "[kg/h]")       
+        except:
+            print ("Gas Mass Flow Sensor is switched off!")
         
-        
-        
+    def getData(self):
+        return self.dataStr
                    

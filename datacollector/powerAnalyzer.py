@@ -4,7 +4,6 @@ import parameter
 import datetime
 import re
 
-
 class PowerAnalyzer(rs232Connection.Rs232Connection, observe.Observer):
 
     dataStr = "(TimeStamp; Power Analyser; Value1; Unit1; Value2; Unit2)"
@@ -24,7 +23,6 @@ class PowerAnalyzer(rs232Connection.Rs232Connection, observe.Observer):
 
     def request(self):
         if True: #parameter.printMessages:
-            print ("done power analyser")
             #For the perfomance voltage and current are only switched on for diagnostic purposes.
             self.getSerialPort().write(str.encode('VOLT:RMS:AC?\n'))
             data1 = self.getSerialPort().read(35)
@@ -41,18 +39,20 @@ class PowerAnalyzer(rs232Connection.Rs232Connection, observe.Observer):
         
         self.getSerialPort().write(str.encode('POW:ACT:AC?\n'))
         data3 = self.getSerialPort().read(35)
-        powerTs = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        powerTs = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")       
+        powList = [float(x) for x in re.findall(self.match_number, str(data3))]      
         
-        powList = [float(x) for x in re.findall(self.match_number, str(data3))]
-           
-        
-        if True:#parameter.printMessages:       
+        if parameter.printMessages:       
             print ("Datetime: " + powerTs)
             print ("Voltage L1,L2,L3: " + str(voltList) + " [V]")
             print ("Current L1,L2,L3: " + str(currList) + " [A]")
             print ("Power L1,L2,L3: " + str(powList) + " [W]")
             print ("Frequency L1,L2,L3: " + str(freqList) + " [Hz]")
-        
-        self.dataStr = "({}; Power Analyser; {}; {}; {}; {}; {}; {})".format(powerTs, powList[0], \
-                       "L1, [W]", powList[1], "L2, [W]", powList[2], "L3, [W]")
-        
+        try:
+            self.dataStr = "({}; Power Analyser; {}; {}; {}; {}; {}; {})".format(powerTs, powList[0], \
+                           "[L1, W]", powList[1], "[L2, W]", powList[2], "[L3, W]")
+        except:
+            print ("Power Analyser is switched off!")
+            
+    def getData(self):
+        return self.dataStr
