@@ -1,12 +1,25 @@
 # CHPefficiency
 
-# Project Title
+Setup of data acquisition system:
+* Data Infrastructure: 
+  * [Router](https://avm.de/produkte/fritzbox/fritzbox-7490/) - Fritz!Box 7490
+  * [Raspberry Pi 3 (Client)](https://www.raspberrypi.org/) 
+* Electrical Energy Flow:
+  * [RS232-Patine](http://www.produktinfo.conrad.com/datenblaetter/1300000-1399999/001337093-an-01-ml-RASPBERRY_PI_GPIO_TX___RX_ZU_de_en_fr_nl.pdf) - renkforce
+  * [Power Analyzer (RS232)](https://www.infratek-ag.com/) - Power Analysator Infratek 107A
+* Thermal Energy Flow:
+  * [MBus Master](https://www.wachendorff-prozesstechnik.de/produktgruppen/gateways-und-protokollwandler/produkte/m-bus/pegelwandler-ethernet/Gateway-Protokollwandler-M-Bus-Master-auf-Ethernet-HD67030B2/) - MBus to Ethernet converter, master MBus up to 160 slaves
+  * [Heat Meter (M-Bus)](https://www.zenner.de/kategorie/kategorie/ultraschall-kompakt-waermezaehler/produkt/waermezaehler_kompakt_zelsius_ultraschall.html) - 2x Zelsius C5 IUF
+* Chemical Energy Flow:
+  * [A/D Converter (I2C)](https://www.adafruit.com/product/1085) - adafruit ADS1115
+  * [Mass Flow Meter](https://www.bronkhorst.com/products/gas-flow/low-p-flow/f-103e/) - Bronkhost LOW-ΔP-FLOW F-103E
+  * [Gas Analyzer](https://products.inficon.com/en-us/nav-products/product/detail/micro-gc-fusion-gas-analyzer/) - Inficon Micro GC Fusion
+  
+  
 
-One Paragraph of project description goes here
+### Context of the development
+In the context of the ηNet energy management project a test bench was developed that allows the energetic analysis of energy systems. On the basis of the energy flows at a combined heat and power plant the efficiency should to be determined as a function of of the operating conditions. A Rasbarry PI 3 (Rasbian) was used for the data acquisition of the energy flows. The system can also be controlled via relays.  
 
-## Getting Started
-
-These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
 
 ### Prerequisites
 
