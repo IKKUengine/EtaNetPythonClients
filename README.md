@@ -25,7 +25,7 @@ In the context of the ηNet energy management project a test bench was developed
   ![alt text](https://github.com/IKKUengine/CHPefficiency/blob/master/measurement_system.png)
   
 ### UML-Class Diagram of Python-Client Application
-The diagram is created with [Violet UML Editor](http://alexdp.free.fr/violetumleditor/page.php) and can also be viewed via a browser. 
+The diagram is created with [Violet UML Editor](http://alexdp.free.fr/violetumleditor/page.php) and can also be viewed via a browser. Details have been omitted for a better overview.
 
 ![alt text](https://github.com/IKKUengine/CHPefficiency/blob/master/class_diagram_python-client.png)
 
@@ -37,7 +37,7 @@ The diagram is created with [Violet UML Editor](http://alexdp.free.fr/violetumle
  #### NI LabVIEW
 The server application has not yet been checked in, but is coming very soon... for starters, all values of the system will be output via a simple graphical interface by RPI client. 
 
-### Installing
+### Deployment and Starting
 
 Starting with a Rasbian operating system, the following external Python modules are to be installed:
 
@@ -45,48 +45,24 @@ Starting with a Rasbian operating system, the following external Python modules 
 * [ganehag/pyMeterBus](https://github.com/ganehag/pyMeterBus) - follow the readme instructions
 
 
-If so far everything is installed, then clone this repro:
+If so far everything is installed, then open a terminal and clone this repro:
 
 ```
+cd ~
 git clone https://github.com/IKKUengine/CHPefficiency.git
+cd CHPefficiency
+python3 main.py
 ```
 
-or download [it](https://github.com/IKKUengine/CHPefficiency/archive/master.zip).
-
-
-## Running the tests
-
-Explain how to run the automated tests for this system
-
-### Break down into end to end tests
-
-Explain what these tests test and why
-
+or download [it](https://github.com/IKKUengine/CHPefficiency/archive/master.zip) to your home directory and open a terminal:
 ```
-Give an example
+cd ~
+cd CHPefficiency
+python3 main.py
 ```
 
-### And coding style tests
+### Activate Analysis Mode
 
-Explain what these tests test and why
-
-```
-Give an example
-```
-
-## Deployment
-
-Add additional notes about how to deploy this on a live system
-
-## Built With
-
-* [Dropwizard](http://www.dropwizard.io/1.0.2/docs/) - The web framework used
-* [Maven](https://maven.apache.org/) - Dependency Management
-* [ROME](https://rometools.github.io/rome/) - Used to generate RSS Feeds
-
-## Contributing
-
-Please read [CONTRIBUTING.md](https://gist.github.com/PurpleBooth/b24679402957c63ec426) for details on our code of conduct, and the process for submitting pull requests to us.
 
 ## Versioning
 
@@ -94,17 +70,11 @@ We use [SemVer](http://semver.org/) for versioning. For the versions available, 
 
 ## Authors
 
-* **Billie Thompson** - *Initial work* - [PurpleBooth](https://github.com/PurpleBooth)
+* **Ferhat Aslan**
 
-See also the list of [contributors](https://github.com/your/project/contributors) who participated in this project.
 
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
 
-## Acknowledgments
-
-* Hat tip to anyone whose code was used
-* Inspiration
-* etc
 
