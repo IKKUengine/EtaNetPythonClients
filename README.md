@@ -1,20 +1,25 @@
 # CHPefficiency
+## Test Bench for Determining Efficiency
 
-Setup of data acquisition system:
+### Setup of data acquisition system
 * Data Infrastructure: 
   * [Router](https://avm.de/produkte/fritzbox/fritzbox-7490/) - Fritz!Box 7490
   * [Raspberry Pi 3 (Client)](https://www.raspberrypi.org/) 
-* Electrical Energy Flow:
+* Electrical Energy Acquisition:
   * [RS232-Patine](http://www.produktinfo.conrad.com/datenblaetter/1300000-1399999/001337093-an-01-ml-RASPBERRY_PI_GPIO_TX___RX_ZU_de_en_fr_nl.pdf) - renkforce
   * [Power Analyzer (RS232)](https://www.infratek-ag.com/) - Power Analysator Infratek 107A
-* Thermal Energy Flow:
+* Thermal Energy Acquisition:
   * [MBus Master](https://www.wachendorff-prozesstechnik.de/produktgruppen/gateways-und-protokollwandler/produkte/m-bus/pegelwandler-ethernet/Gateway-Protokollwandler-M-Bus-Master-auf-Ethernet-HD67030B2/) - MBus to Ethernet converter, master MBus up to 160 slaves
   * [Heat Meter (M-Bus)](https://www.zenner.de/kategorie/kategorie/ultraschall-kompakt-waermezaehler/produkt/waermezaehler_kompakt_zelsius_ultraschall.html) - 2x Zelsius C5 IUF
-* Chemical Energy Flow:
+* Chemical Energy Acquisition:
   * [A/D Converter (I2C)](https://www.adafruit.com/product/1085) - adafruit ADS1115
   * [Mass Flow Meter](https://www.bronkhorst.com/products/gas-flow/low-p-flow/f-103e/) - Bronkhost LOW-ΔP-FLOW F-103E
   * [Gas Analyzer](https://products.inficon.com/en-us/nav-products/product/detail/micro-gc-fusion-gas-analyzer/) - Inficon Micro GC Fusion
-  
+* Controlling:  
+ * [Relais-Modul](https://www.conrad.de/de/makerfactory-4-kanal-relais-modul-1612775.html) - MAKERFACTORY 4-Kanal Relais-Modul
+ 
+### Schematic Overview
+  ![alt text](https://github.com/IKKUengine/CHPefficiency/blob/master/measurement_system.png)
   
 
 ### Context of the development
