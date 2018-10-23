@@ -34,18 +34,18 @@ The diagram is created with [Violet UML Editor](http://alexdp.free.fr/violetumle
 #### Rasberry Pi 3
  * [Download the latest version of Rasbian](https://www.raspberrypi.org/downloads/raspbian/). Follow the instructions on the page to get your RPI 3 up and running. Best is to use the desktop version.
  * Organize all or part of above components.
+ 
+ * Starting with your RPI 3 and a new Rasbian operating system, the following external Python modules are to be installed:
+   * [adafruit/Adafruit_Python_ADS1x15](https://github.com/adafruit/Adafruit_Python_ADS1X15) - follow the readme instructions
+   * [ganehag/pyMeterBus](https://github.com/ganehag/pyMeterBus) - follow the readme instructions
+
+ 
  #### NI LabVIEW
 The server application has not yet been checked in, but is coming very soon... for starters, all values of the system will be output via a simple graphical interface by RPI client. 
 
-### Deployment and Starting
+### Deployment and Starting of Python-Client
 
-Starting with a Rasbian operating system, the following external Python modules are to be installed:
-
-* [adafruit/Adafruit_Python_ADS1x15](https://github.com/adafruit/Adafruit_Python_ADS1X15) - follow the readme instructions
-* [ganehag/pyMeterBus](https://github.com/ganehag/pyMeterBus) - follow the readme instructions
-
-
-If so far everything is installed, then open a terminal and clone this repro:
+If so far everything is installed, then open a terminal in your RPI 3 and clone this repro:
 
 ```
 cd ~
@@ -64,9 +64,6 @@ python3 main.py
 ### Activate Analysis Mode
 
 
-## Versioning
-
-We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/your/project/tags). 
 
 ## Authors
 
