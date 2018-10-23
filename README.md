@@ -1,5 +1,8 @@
 # CHPefficiency
-## Test Bench for Determining Efficiency
+## Test Bench for Determining Efficiency (Python and LabVIEW)
+
+### Context of the development
+In the context of the ηNet energy management project a test bench was developed that allows the energetic analysis of energy systems. On the basis of the energy flows at a combined heat and power plant the efficiency should to be determined as a function of of the operating conditions. A Raspberry PI 3 (Rasbian) was used for the data acquisition of the energy flows. The system can also be controlled via relays.  
 
 ### Setup of data acquisition system
 * Data Infrastructure: 
@@ -16,41 +19,40 @@
   * [Mass Flow Meter](https://www.bronkhorst.com/products/gas-flow/low-p-flow/f-103e/) - Bronkhost LOW-ΔP-FLOW F-103E
   * [Gas Analyzer](https://products.inficon.com/en-us/nav-products/product/detail/micro-gc-fusion-gas-analyzer/) - Inficon Micro GC Fusion
 * Controlling:  
- * [Relais-Modul](https://www.conrad.de/de/makerfactory-4-kanal-relais-modul-1612775.html) - MAKERFACTORY 4-Kanal Relais-Modul
+  * [Relais-Modul](https://www.conrad.de/de/makerfactory-4-kanal-relais-modul-1612775.html) - MAKERFACTORY 4-Kanal Relais-Modul
  
-### Schematic Overview
+### Schematic Overview of Energy System
   ![alt text](https://github.com/IKKUengine/CHPefficiency/blob/master/measurement_system.png)
   
+### UML-Class Diagram of Python-Client Application
+The diagram is created with [Violet UML Editor](http://alexdp.free.fr/violetumleditor/page.php) and can also be viewed via a browser. 
 
-### Context of the development
-In the context of the ηNet energy management project a test bench was developed that allows the energetic analysis of energy systems. On the basis of the energy flows at a combined heat and power plant the efficiency should to be determined as a function of of the operating conditions. A Rasbarry PI 3 (Rasbian) was used for the data acquisition of the energy flows. The system can also be controlled via relays.  
+![alt text](https://github.com/IKKUengine/CHPefficiency/blob/master/class_diagram_python-client.png)
 
 
 ### Prerequisites
-
-What things you need to install the software and how to install them
-
-```
-Give examples
-```
+#### Rasberry Pi 3
+ * [Download the latest version of Rasbian](https://www.raspberrypi.org/downloads/raspbian/). Follow the instructions on the page to get your RPI 3 up and running. Best is to use the desktop version.
+ * Organize all or part of above components.
+ #### NI LabVIEW
+The server application has not yet been checked in, but is coming very soon... for starters, all values of the system will be output via a simple graphical interface by RPI client. 
 
 ### Installing
 
-A step by step series of examples that tell you how to get a development env running
+Starting with a Rasbian operating system, the following external Python modules are to be installed:
 
-Say what the step will be
+* [adafruit/Adafruit_Python_ADS1x15](https://github.com/adafruit/Adafruit_Python_ADS1X15) - follow the readme instructions
+* [ganehag/pyMeterBus](https://github.com/ganehag/pyMeterBus) - follow the readme instructions
 
-```
-Give the example
-```
 
-And repeat
+If so far everything is installed, then clone this repro:
 
 ```
-until finished
+git clone https://github.com/IKKUengine/CHPefficiency.git
 ```
 
-End with an example of getting some data out of the system or using it for a little demo
+or download [it](https://github.com/IKKUengine/CHPefficiency/archive/master.zip).
+
 
 ## Running the tests
 
