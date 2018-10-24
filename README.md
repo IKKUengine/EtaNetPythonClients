@@ -63,7 +63,38 @@ python3 main.py
 
 ### Activate Analysis Mode
 
+The software project has a parameterization that works with globally variables. The purpose of this parameterization is:
 
+* to print messages on a terminal during the runtime of the application, 
+* to shwitch on or off the fullscreen mode and 
+* to set time trigger for all threads.
+
+Here you can see what has to be done to enable this analysis mode and to change the times. 
+Open a terminal on your RPI:
+
+```
+cd ~
+cd CHPefficiency
+nano parameter.py
+```
+
+Inside of the nano editor change the corresponding places with True and False:
+```
+...
+global fullscreen
+fullscreen = **True**
+
+global printMessages
+printMessages = **False**
+...
+```
+Write out the file and exit the editor. 
+Start now the application:
+```
+cd ~
+cd CHPefficiency
+python3 main.py
+```
 
 ## Authors
 
