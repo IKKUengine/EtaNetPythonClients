@@ -103,6 +103,6 @@ python3 main.py
 
 ## License
 
-This project is licensed under MIT - see the [LICENSE.md](LICENSE.md) file for details
+This project is licensed under MIT - see the [LICENSE](LICENSE) file for details
 
 
