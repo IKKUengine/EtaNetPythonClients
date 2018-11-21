@@ -16,9 +16,9 @@ class RemoteSwitches (gbioRPIConnection.GbioRpiConnection, observe.Observer):
     
 
     def request(self):
-        powerTs = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        status = self.getCHPOnOffStatus()
         try:
+            powerTs = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            status = self.getCHPOnOffStatus()
             self.dataStr = "({}; CHP On/Off; {}; {})".format(powerTs, status, "[None]")       
         except:
             print ("Gas Mass Flow Sensor is switched off!")
