@@ -1,0 +1,7 @@
+__pycache__/
+connections/__pycache__/
+controlling/__pycache__/
+datacollector/__pycache__/
+guicreater/__pycache__/
+observer/__pycache__/
+*.pyc

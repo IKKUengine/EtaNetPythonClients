@@ -25,7 +25,7 @@ timeTriggerMassFlow = 1
 
 global timeTriggerMeterbus
 #in second
-timeTriggerMeterbus = 1
+timeTriggerMeterbus = 3
 
 global timeTriggerConntrolling
 #in second

@@ -137,12 +137,13 @@ class etaNetClient(threading.Thread, observe.Observable):
     def sendAllData(self):
         message =  "{}: {}".format(parameter.systemIdentifier, self.getDataList()) 
         lenString = len(message.encode('UTF-8'))
-        lenString = lenString
+        lenlen = len(str(lenString).encode('UTF-8'))
         if parameter.printMessages:  
             print (lenString)
             print (message)
             
         try:
+            self.s.send(str(lenlen).encode())
             self.s.send(str(lenString).encode())
             self.s.send(message.encode())
         except:
