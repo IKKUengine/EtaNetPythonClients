@@ -93,7 +93,7 @@ class etaNetClient(threading.Thread, observe.Observable):
     stop = True
     messageServer = "NO SERVER CONNECTION!"
     
-    def __init__(self, host = '192.168.178.22', port = 5005):
+    def __init__(self, host = '192.168.178.20', port = 5005):
 
         self.host = host
         self.port = port

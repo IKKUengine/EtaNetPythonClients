@@ -37,7 +37,7 @@ class MassFlow(i2cAdafruitConnection.I2cAdafruitConnection, observe.Observer):
             # ADC (ADS1115 = 16-bit).
 
             # Calculation and calibration of the gas fuel flow
-            fuelflow = (values[0]) / (2 * 3276.8) * 4.2 * 0.046166667
+            fuelflow = (values[0]) / (3276.8) * 4.2 * 0.046166667
         except:
             print ("Gas Mass Flow Sensor is switched off!")
         if parameter.printMessages:

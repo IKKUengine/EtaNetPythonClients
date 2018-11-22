@@ -32,6 +32,13 @@ class HeatMeter(networkConnection.MBusConnection, observe.Observer):
 #                "\x0A\x59\x29\x04\x26\x44\x18\x00\x00\x02\xFD\x17\x00\x00\x1F\x9F\x16"
 
         telegram = meterbus.load(data)
+        #Instabilities/bugs of meterbus lib/package
+        find3 = [float(x) for x in re.findall(self.match_number, str(telegram.records[13].interpreted) + str(telegram.records[13].interpreted))]
+        if find3[0] == 3:
+            replace = find3[1]
+        else:
+            replace = find3[0]
+
         powList = [float(x) for x in re.findall(self.match_number, str(telegram.records[12].interpreted) \
                   + str(telegram.records[13].interpreted) + str(telegram.records[9].interpreted) \
                   + str(telegram.records[10].interpreted))]
@@ -51,13 +58,13 @@ class HeatMeter(networkConnection.MBusConnection, observe.Observer):
                                     + str(telegram.records[10].interpreted) + "\n" \
                                     + str(telegram.records[11].interpreted) + "\n" \
                                     + str(telegram.records[12].interpreted) + "\n" \
-                                    + str(telegram.records[13].interpreted) + "\n" \
+                                    + replace + "\n" \
                                     + str(telegram.records[14].interpreted) + "\n" \
                                     + str(telegram.records[15].interpreted) + "\n" \
                                     + str(telegram.records[16].interpreted))
         try:
             self.dataStr = "({}; Heat Meter {}; {:8.6f}; {}; {:8.6f}; {}; {:8.6f}; {}; {:8.6f}; {})".format(powerTs, \
-                           self.addr, powList[0], "[W]", powList[2], "[m³/h]", powList[3], "[T_Flow]", powList[4], \
+                           self.addr, powList[0], "[W]", replace, "[m³/h]", powList[3], "[T_Flow]", powList[4], \
                            "[T_Return]")
         except:
             print ("Heat Meter {} is switched off!".format(self.addr))
