@@ -108,9 +108,10 @@ cd CHPefficiency
 python3 main.py
 ```
 
-## Authors
-
-* **Ferhat Aslan**
+## System and Software Engineer, Project Supervisor and Author
+Ferhat Aslan
+## Project Collaboration and Software Engineer
+Florian Ferry
 
 
 ## License
