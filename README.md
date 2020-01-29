@@ -1,26 +1,9 @@
-# CHPefficiency
-## Test Bench for Determining Efficiency (Python and LabVIEW)
+# EtaNetPythonClients
+## Clients infrastructure for the ηNet energy management system (Python 3)
 
 ### Context of the development
-In the context of the ηNet energy management project a test bench was developed that allows the energetic analysis of energy systems. On the basis of the energy flows at a combined heat and power plant the efficiency should to be determined as a function of of the operating conditions. A Raspberry PI 3 (Rasbian) was used for the data acquisition of the energy flows. The system can also be controlled via relays.  
+Within the framework of the energy management project ηNet a cyber-physical system was developed which enables the energetic analysis and control of energy systems. Based on the energy flows, the operating conditions of the individual systems are determined and modified with the help of a management algorithm. For this project a Raspberry PI 3 (Rasbian) was used to collect and modify data on energy flows. 
 
-### Setup of data acquisition system
-* Data Infrastructure: 
-  * [Router](https://avm.de/produkte/fritzbox/fritzbox-7490/) - Fritz!Box 7490
-  * [Raspberry Pi 3 (Client)](https://www.raspberrypi.org/) 
-* Electrical Energy Acquisition:
-  * [RS232-Patine](http://www.produktinfo.conrad.com/datenblaetter/1300000-1399999/001337093-an-01-ml-RASPBERRY_PI_GPIO_TX___RX_ZU_de_en_fr_nl.pdf) - renkforce
-  * [Power Analyzer (RS232)](https://www.infratek-ag.com/) - Power Analysator Infratek 107A
-* Thermal Energy Acquisition:
-  * [MBus Master](https://www.wachendorff-prozesstechnik.de/produktgruppen/gateways-und-protokollwandler/produkte/m-bus/pegelwandler-ethernet/Gateway-Protokollwandler-M-Bus-Master-auf-Ethernet-HD67030B2/) - MBus to Ethernet converter, master MBus up to 160 slaves
-  * [Heat Meter (M-Bus)](https://www.zenner.de/kategorie/kategorie/ultraschall-kompakt-waermezaehler/produkt/waermezaehler_kompakt_zelsius_ultraschall.html) - 2x Zelsius C5 IUF
-* Chemical Energy Acquisition:
-  * [A/D Converter (I2C)](https://www.adafruit.com/product/1085) - adafruit ADS1115
-  * [Mass Flow Meter](https://www.bronkhorst.com/products/gas-flow/low-p-flow/f-103e/) - Bronkhost LOW-ΔP-FLOW F-103E
-  * [Gas Analyzer](https://products.inficon.com/en-us/nav-products/product/detail/micro-gc-fusion-gas-analyzer/) - Inficon Micro GC Fusion
-* Controlling:  
-  * [Relais-Modul](https://www.conrad.de/de/makerfactory-4-kanal-relais-modul-1612775.html) - MAKERFACTORY 4-Kanal Relais-Modul
- 
 ### Schematic Overview of Energy System
   ![alt text](https://github.com/IKKUengine/CHPefficiency/blob/master/measurement_system.png)
   
@@ -28,7 +11,6 @@ In the context of the ηNet energy management project a test bench was developed
 The diagram is created with [Violet UML Editor](http://alexdp.free.fr/violetumleditor/page.php) and can also be viewed via a browser. Details have been omitted for a better overview.
 
 ![alt text](https://github.com/IKKUengine/CHPefficiency/blob/master/class_diagram_python-client.png)
-
 
 ### Prerequisites
 #### Rasberry Pi 3
