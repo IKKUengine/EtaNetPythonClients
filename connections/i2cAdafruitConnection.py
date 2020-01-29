@@ -54,5 +54,3 @@ class I2cAdafruitConnection(threading.Thread):
         self.exit = False
 
 
-
-

@@ -3,25 +3,31 @@ from connections import gbioRPIConnection
 from observer import observe
 import datetime
 
-class RemoteSwitches (gbioRPIConnection.GbioRpiConnection, observe.Observer):
+class RemoteSwitches (gbioRPIConnection.OnePortGbioRpiConnection, observe.Observer, observe.Observable):
 
-    dataStr = "(TimeStamp; CHP ON/OFF; Value1; Unit1; Value2; Unit2)"
+    dataStr = "'NaN'"
+    headerStr = "'CHP On/Off'"
 
     def __init__(self, observable):
-        gbioRPIConnection.GbioRpiConnection.__init__(self)
+        gbioRPIConnection.OnePortGbioRpiConnection.__init__(self, 12)
         observe.Observer.__init__(self, observable)
+        observe.Observable.__init__(self)
         
-    def notify(self):
+    def notifyData(self):
         return self.dataStr
     
+    def notifyHeader(self):
+      return self.headerStr
 
     def request(self):
         try:
-            powerTs = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-            status = self.getCHPOnOffStatus()
-            self.dataStr = "({}; CHP On/Off; {}; {})".format(powerTs, status, "[None]")       
+            status = self.getGPIOPinStatus()
+            self.dataStr = "{:8.6f}".format(status)
+            message = self.getControlParameter()
+            print (message)
+            
         except:
-            print ("Gas Mass Flow Sensor is switched off!")
-
+            print ("GBIO controlled Ralais is not working!")
+        
     def getData(self):
         return self.dataStr

@@ -1,19 +1,19 @@
 global systemIdentifier
-systemIdentifier = "CHP- SenerTec Dachs G5.5"
+systemIdentifier = 'CHP- SenerTec Dachs G5.5'
 
 global fullscreen
-fullscreen = True
+fullscreen = False
 
 global printMessages
 printMessages = False
 
 global timeTriggerSendData
 #in second
-timeTriggerSendData = 2.5
+timeTriggerSendData = 2
 
 global timeTriggervisualData
 #in milisecond
-timeTriggervisualData = 1500
+timeTriggervisualData = 1000
 
 global timeTriggerPowerAnalayser
 #in second
@@ -25,8 +25,16 @@ timeTriggerMassFlow = 1
 
 global timeTriggerMeterbus
 #in second
-timeTriggerMeterbus = 2
+timeTriggerMeterbus = 1
 
 global timeTriggerConntrolling
 #in second
-timeTriggerConntrolling = 0.1
+timeTriggerConntrolling = 1
+
+global switchOffMaxT
+#in °C
+switchOffMaxT = 65
+
+global switchOffMinT
+#in °C
+switchOffMinT = 20

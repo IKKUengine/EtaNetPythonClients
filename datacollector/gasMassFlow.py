@@ -6,7 +6,8 @@ import datetime
 
 class MassFlow(i2cAdafruitConnection.I2cAdafruitConnection, observe.Observer):
 
-    dataStr = "(TimeStamp; Gas Mass Flow; Value1; Unit1; Value2; Unit2)"
+    dataStr = "'NaN'"
+    headerStr = "'Gas Mass Flow [kg/h]'"
 
     def __init__(self, observable):
        # rs232Connection.Rs232Connection.__init__()
@@ -14,8 +15,11 @@ class MassFlow(i2cAdafruitConnection.I2cAdafruitConnection, observe.Observer):
         i2cAdafruitConnection.I2cAdafruitConnection.__init__(self)
         observe.Observer.__init__(self, observable)
 
-    def notify(self):
+    def notifyData(self):
       return self.dataStr
+    
+    def notifyHeader(self):
+      return self.headerStr
 
     def request(self):
         try:
@@ -37,13 +41,12 @@ class MassFlow(i2cAdafruitConnection.I2cAdafruitConnection, observe.Observer):
             # ADC (ADS1115 = 16-bit).
 
             # Calculation and calibration of the gas fuel flow
-            fuelflow = (values[0]) / (3276.8) * 4.2 * 0.046166667
+            fuelflow = (values[0]) / (3276.8) * 4.2 * 0.046166667 * 0.82615
+            #print (fuelflow)
         except:
             print ("Gas Mass Flow Sensor is switched off!")
-        if parameter.printMessages:
-            print ("Fuel flow [kg/h]: " + str(fuelflow))
         try:
-            self.dataStr = "({}; Gas Mass Flow; {:8.6f}; {})".format(powerTs, fuelflow, "[kg/h]")       
+            self.dataStr = "{:8.6f}".format(fuelflow)       
         except:
             pass
         

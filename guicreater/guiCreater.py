@@ -10,17 +10,16 @@ import time
 
 class Gui(Frame):
     # Members
-    textPower = 'Hallo IKKUengine!'
-    textSignal = 'Hallo IKKUengine!'
+    textPower = 'Hallo GenLab!'
+    textSignal = 'Hallo GenLab!'
+    textFeedback = 'Server Feedback!'
 
     def __init__(self):
         self.netConn = etaNet.etaNetClient()
         self.powerAn = powerAnalyzer.PowerAnalyzer(self.netConn)
+        self.relais = relaisRemoteSwitches.RemoteSwitches(self.netConn)        
         self.massFlow = gasMassFlow.MassFlow(self.netConn)
-        self.relais = relaisRemoteSwitches.RemoteSwitches(self.netConn)
-        self.heatMeater1 = heatMeter.HeatMeter(self.netConn, 1)
-        time.sleep(1)
-        self.heatMeater2 = heatMeter.HeatMeter(self.netConn, 2)
+        self.heatMeaters = heatMeter.HeatMeter(self.netConn)
         # subject.notify_observers('done')
         # GUI Init
         # self.requestPowerAnalyzer()
@@ -30,6 +29,8 @@ class Gui(Frame):
         self.infoText.place(relx=0.5, rely=0.5, anchor=CENTER)
         self.signalText = Label(master, text=self.textSignal, bg="yellow")
         self.signalText.place(relx=0.99, rely=0.001, anchor=NE)
+        self.textFeedback = Label(master, text=self.textFeedback, fg="blue")
+        self.textFeedback.place(relx=0.8, rely=0.001, anchor=NE)
  
         main_menu = Menu(menu_bar, tearoff=0)
         measure_menu = Menu(menu_bar, tearoff=0)
@@ -38,8 +39,19 @@ class Gui(Frame):
         measure_menu.add_command(label="Start Measure", command=self.startMeasure)
         measure_menu.add_command(label="Stop Transfer", command=self.netConn.setStop)
         measure_menu.add_command(label="Start Transfer", command=self.netConn.setStart)
-        controlling_menu.add_command(label="On/Off CHP", command=self.relais.setRelaisCHPOnOff)
+        controlling_menu.add_command(label="On/Off CHP", command=self.relais.setGPIOPinOnOff)
         main_menu.add_command(label="Quit", command=master.destroy)
+        
+        self.label = Label(master, text = "IP-Address Server:")
+        self.label.grid(row = 0, column = 0, sticky = W,  padx = 5, pady = 30)
+        
+        self.entry = Entry(master)
+        self.entry.grid(row = 1, column = 0, sticky = W,  padx = 5, pady = 5)
+        self.entry.focus_set()
+        self.entry.insert(0, self.netConn.getIP())
+        
+        self.button = Button(master, text="Set Server IP", command =self.connect)
+        self.button.grid(row = 2, column = 0, sticky = W, padx = 5, pady = 5)
 
         menu_bar.add_cascade(label="Menu", menu=main_menu)
         menu_bar.add_cascade(label="Measurement", menu=measure_menu)
@@ -48,39 +60,55 @@ class Gui(Frame):
         if parameter.fullscreen:
             master.attributes('-fullscreen', True)
         Frame.__init__(self, master)
+        
+    def connect(self):
+        ipAddr = self.entry.get()
+        
+        try:
+            self.netConn.setIP(ipAddr)
+            print (ipAddr)
+        except:
+            if parameter.printMessages:
+                print ("Please switch on the Server-App!")
+            self.messageServer = "NO SERVER CONNECTED!"
+            print("NO SERVER CONNECTED!")
+
 
     def stopMeasure(self):
         self.powerAn.setStop()
         self.massFlow.setStop()
-        self.heatMeater1.setStop()
-        self.heatMeater2.setStop()
+        self.heatMeaters.setStop()
         self.relais.setStop()
         
     def startMeasure(self):
         self.powerAn.setStart()
         self.massFlow.setStart()
-        self.heatMeater1.setStart()
-        self.heatMeater2.setStart()
+        self.heatMeaters.setStart()
         self.relais.setStart()
         
     def __exit__(self):
         self.powerAn.setExit()
         self.powerAn.__exit__()
         self.massFlow.setExit()
-        self.heatMeater1.setExit()
-        self.heatMeater1.__exit__()
-        self.heatMeater2.setExit()
-        self.heatMeater2.__exit__()
+        self.heatMeaters.setExit()
+        self.heatMeaters.__exit__()
         self.relais.setExit()
         self.netConn.setExit()
         self.netConn.__exit__()
         
     def visualizationData(self):
-        self.infoText['text'] = self.adaptDataList()
+        #self.infoText['text'] = self.adaptDataList()
         self.signalText['text'] = self.netConn.getMessageServer()
+        self.textFeedback['text'] = self.netConn.getFeedback()
         self.after(parameter.timeTriggervisualData, self.visualizationData)
         
     def adaptDataList(self):
-        adaptData = "{}\n\r{}\n\r{}\n\r{}\n\r{}".format(self.powerAn.getData(), self.heatMeater1.getData(), \
-                    self.heatMeater2.getData(), self.massFlow.getData(), self.relais.getData())
+        adaptData = "{}\n\r{}\n\r{}".format(self.heatMeaters.getData(1), self.heatMeaters.getData(2), self.heatMeaters.getData(3))
         return adaptData
+    
+    def switchOffHysteresis(self):
+        #if  self.heatMeater1.getTreturn() >= parameter.switchOffMaxT and self.relais.getCHPOnOffStatus() == 1:
+        #    self.relais.setRelaisCHPOff()
+        #if self.heatMeater1.getTreturn() <= parameter.switchOffMinT and self.relais.getCHPOnOffStatus() == 0:
+        #    self.relais.setRelaisCHPOn()
+        self.after( 100, self.switchOffHysteresis)

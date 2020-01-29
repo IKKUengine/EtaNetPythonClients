@@ -2,7 +2,7 @@ import threading
 import RPi.GPIO as GPIO
 import parameter
 import time
-class GbioRpiConnection(threading.Thread):
+class OnePortGbioRpiConnection(threading.Thread):
     
     exit = True
     stop = True
@@ -19,7 +19,7 @@ class GbioRpiConnection(threading.Thread):
         threading.Thread.start(self)
 
     def run(self):
-        while self.exit:#threat wird erst beendet wenn aus while schleife herausgeganen wird
+        while self.exit:
             if self.stop:
                 self.request()
             time.sleep(parameter.timeTriggerConntrolling)
@@ -27,14 +27,16 @@ class GbioRpiConnection(threading.Thread):
     def request(self):
         pass
     
-    def setRelaisCHPOnOff(self):
-        #if GPIO.input(12):
-            #self.signalText['text'] = 'CHP is OFF'
-        #else:
-            #self.signalText['text'] = 'CHP is ON'
+    def setGPIOPinOnOff(self):
         GPIO.output(self.portNumber, not GPIO.input(self.portNumber))
+        
+    def setGPIOPinOn(self):
+        GPIO.output(self.portNumber, 1)
+        
+    def setGPIOPinOff(self):
+        GPIO.output(self.portNumber, 0)
     
-    def getCHPOnOffStatus(self):
+    def getGPIOPinStatus(self):
         status = GPIO.input(self.portNumber)
         return status
     
