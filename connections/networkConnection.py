@@ -20,23 +20,8 @@ class MBusConnection(threading.Thread):
         self.s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
 
-        try: 
-            if parameter.printMessages:
-                print ('init MBus Connection')
-            
-          
-            if parameter.printMessages:
-                print ("socket successfully created")       
-            if parameter.printMessages:
-                print('Connection Mbus is done')
-            #self.initDevice(primeAdress)
-            
-            if parameter.printMessages:
-                host_id = self.s.getpeername()
-                print ("Addr.: " + str(host_id))
-                print ("(\'" + host + "\', " + str(port) + ")")                
-                
-            #self.s.connect((self.host, self.port))
+        try:                       
+            self.s.connect((self.host, self.port))
             threading.Thread.__init__(self)
             threading.Thread.start(self)
             
@@ -75,7 +60,7 @@ class MBusConnection(threading.Thread):
         return RequestShortFrame
         
     def getAllData(self, primeAdress):
-        #print(primeAdress)
+        print(primeAdress)
         self.s.send(self.getDataDeviceCode(primeAdress).encode())
         respond = self.s.recv(119)
         return respond 
