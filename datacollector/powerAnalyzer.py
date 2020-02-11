@@ -16,6 +16,12 @@ class PowerAnalyzer(rs232Connection.Rs232Connection, observe.Observer):
         rs232Connection.Rs232Connection.__init__(self)
         observe.Observer.__init__(self, observable)
         self.match_number = re.compile('-?\ *[0-9]+\.?[0-9]*(?:[Ee]\ *-?\ *[0-9]+)?')
+        # Sensorpfade:
+        self.wire1='/sys/devices/w1_bus_master1/3b-2c98073da241/w1_slave'
+        self.wire2='/sys/devices/w1_bus_master1/3b-2c98073db8b6/w1_slave'
+        self.wire3='/sys/devices/w1_bus_master1/3b-4c98073d93cd/w1_slave'
+        self.wire4='/sys/devices/w1_bus_master1/3b-4c98073d951d/w1_slave'
+        self.wire5='/sys/devices/w1_bus_master1/3b-4cfc0958f8ce/w1_slave'
 
         try:
             self.getSerialPort().write(str.encode('FORM:PH ALL\n'))
@@ -56,8 +62,7 @@ class PowerAnalyzer(rs232Connection.Rs232Connection, observe.Observer):
                 print ("Voltage L1,L2,L3: " + str(voltList) + " v")
                 print ("Current L1,L2,L3: " + str(currList) + " [A]")
                 print ("Power L1,L2,L3: " + str(powList) + " [W]")
-                print ("Frequency L1,L2,L3: " + str(freqList) + " [Hz]")
-            
+                print ("Frequency L1,L2,L3: " + str(freqList) + " [Hz]")           
             self.dataStr = "{:8.6f}, {:8.6f}, {:8.6f}, {:8.6f},{:8.6f}, {:8.6f}, {:8.6f}, {:8.6f},{:8.6f}, {:8.6f}, {:8.6f}, {:8.6f}".format(powList[0], powList[1], powList[2], voltList[0], voltList[1], voltList[2], currList[0], currList[1], currList[2],freqList[0], freqList[1], freqList[2])
                 
         except:
@@ -65,3 +70,41 @@ class PowerAnalyzer(rs232Connection.Rs232Connection, observe.Observer):
             
     def getData(self):
         return self.dataStr
+    
+    # Auslesend der Temperatur:
+    def temp_read(self, pfad):
+        value = NaN
+        with open(pfad) as f:
+            f.readline()
+            s=f.readline()
+        n=s.find('t=')
+        if(n>0):
+            temp=int(s[n+2:])/1000
+        return temp
+    
+    # Funktion zum Berechnen des Füllstands:
+    def calc_heat (self,t1, t2, t3, t4, t5):
+        #Configs of the Buffer and cal.
+        cp=#float(config[0])
+        roh=#float(config[1])
+        V_ges=950
+        V_1=#float(config[3])
+        V_2=#float(config[4])
+        V_3=#float(config[5])
+        V_4=#float(config[6])
+        V_5=#float(config[7])
+        t_min= 12#float(config[8])
+        t_max= 73#float(config[9])
+        #q sollte die Energiemenge sein, die durch die Heatmeter bestimmt wird.
+        q, q_rel
+        q_max=cp*roh*V_ges*(t_max)/3600
+        q_min=cp*roh*V_ges*(t_min)/3600
+        q_delta=cp*roh*V_ges*(t_max-t_min)/3600
+        q1=cp*roh*(t1-t_min)*(V_1/100)*V_ges/3600
+        q2=cp*roh*(t2-t_min)*(V_1/100)*V_ges/3600
+        q3=cp*roh*(t3-t_min)*(V_1/100)*V_ges/3600
+        q4=cp*roh*(t4-t_min)*(V_1/100)*V_ges/3600
+        q5=cp*roh*(t5-t_min)*(V_1/100)*V_ges/3600
+        q=q1+q2+q3+q4+q5
+        q_rel=(q/q_delta)*100
+        return q_rel
