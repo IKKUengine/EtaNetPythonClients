@@ -2,7 +2,7 @@ global systemIdentifier
 systemIdentifier = 'Heat Sorage'
 
 global fullscreen
-fullscreen = False
+fullscreen = True
 
 global printMessages
 printMessages = False

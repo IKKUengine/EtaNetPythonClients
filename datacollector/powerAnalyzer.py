@@ -61,6 +61,9 @@ class PowerAnalyzer(rs232Connection.Rs232Connection, observe.Observer):
     def getData(self):
         return self.dataStr
     
+    def getHeader(self):
+        return self.headerStr
+    
     # Auslesend der Temperatur:
     def temp_read(self, pfad):
         value = 'NaN'
