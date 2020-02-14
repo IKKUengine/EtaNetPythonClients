@@ -1,5 +1,5 @@
 global systemIdentifier
-systemIdentifier = 'CHP- SenerTec Dachs G5.5'
+systemIdentifier = 'Heat Sorage'
 
 global fullscreen
 fullscreen = False
