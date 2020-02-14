@@ -27,6 +27,10 @@ global timeTriggerMeterbus
 #in second
 timeTriggerMeterbus = 1
 
+global timeTriggerECar
+#in second
+timeTriggerMeterbus = 1
+
 global timeTriggerConntrolling
 #in second
 timeTriggerConntrolling = 1
