@@ -1,6 +1,6 @@
 import time
 import threading
-import serial
+import can
 import parameter
 
 class CANConnection(threading.Thread):
@@ -11,12 +11,12 @@ class CANConnection(threading.Thread):
 # sudo /sbin/ip link set can0 up type can bitrate 500000 #Code for connection to PiCAN2 via terminal
 # bus = can.interface.Bus(channel='can0', bustype='socketcan_native')#, bitrate=500000)
 
-    try:     
-        __ser = can.interface.Bus(channel='can0', bustype='socketcan_native')
-    except:
-        print ("CAN-Port could not be opened!")
-
     def __init__(self):
+        self.ser = can.interface.Bus(channel='can0', bustype='socketcan_native')
+        self.SoC_message = can.Message(arbitration_id=0x6F1,
+                          data=[0x07, 0x03, 0x22, 0xDD, 0xC4, 0x00, 0x00, 0x00],
+                          extended_id=False)
+
         threading.Thread.__init__(self)
         if parameter.printMessages:
             print("init CAN")
@@ -27,14 +27,18 @@ class CANConnection(threading.Thread):
         while self.exit:#threat wird erst beendet wenn aus while schleife herausgeganen wird
             if self.stop:
                 self.request()
-            time.sleep(parameter.ECar)
+            time.sleep(parameter.timeTriggerECar)
             #self.lock.release()
 
     def request(self):
         pass
 
-    def getSerialPort(self):
-        return self.__ser
+    def getCanPort(self):
+        return self.ser
+    
+    
+    def getMessageSoC(self):
+        return self.SoC_message
 
     def setStop(self):
         self.stop = False

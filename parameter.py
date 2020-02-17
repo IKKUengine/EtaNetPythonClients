@@ -1,5 +1,5 @@
 global systemIdentifier
-systemIdentifier = 'CHP- SenerTec Dachs G5.5'
+systemIdentifier = 'BMW i3'
 
 global fullscreen
 fullscreen = False
@@ -29,7 +29,7 @@ timeTriggerMeterbus = 1
 
 global timeTriggerECar
 #in second
-timeTriggerMeterbus = 1
+timeTriggerECar = 1
 
 global timeTriggerConntrolling
 #in second

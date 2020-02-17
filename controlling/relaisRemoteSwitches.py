@@ -6,7 +6,7 @@ import datetime
 class RemoteSwitches (gbioRPIConnection.OnePortGbioRpiConnection, observe.Observer, observe.Observable):
 
     dataStr = "'NaN'"
-    headerStr = "'CHP On/Off'"
+    headerStr = "'Load Enabe eCar On/Off'"
 
     def __init__(self, observable):
         gbioRPIConnection.OnePortGbioRpiConnection.__init__(self, 12)
