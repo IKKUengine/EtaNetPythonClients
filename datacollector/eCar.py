@@ -1,6 +1,5 @@
 from observer import observe
 from connections import canConnection
-from datacollector import eCar_BMW_i3
 import parameter
 import datetime
 import re
