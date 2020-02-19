@@ -2,6 +2,7 @@
 from connections import gbioRPIConnection
 from observer import observe
 import datetime
+import parameter
 
 class RemoteSwitches (gbioRPIConnection.OnePortGbioRpiConnection, observe.Observer, observe.Observable):
 
@@ -18,16 +19,28 @@ class RemoteSwitches (gbioRPIConnection.OnePortGbioRpiConnection, observe.Observ
     
     def notifyHeader(self):
       return self.headerStr
-
+    
+    def notifyControl(self):
+      return self.headerStr
+    
     def request(self):
-        try:
-            status = self.getGPIOPinStatus()
-            self.dataStr = "{:8.6f}".format(status)
-            message = self.getControlParameter()
+        #try:
+        message = parameter.control_parameter
+        if len(message) == 6:     
+            print("ONOFF:")
             print (message)
+            if int(message[5]) == 0:
+                print("Off CHP")
+                self.setGPIOPinOff()
+            else:
+                print("ON CHP")
+                self.setGPIOPinOn()
+        status = self.getGPIOPinStatus()
+        print(status)
+        self.dataStr = "{:8.6f}".format(status)
             
-        except:
-            print ("GBIO controlled Ralais is not working!")
+        #except:
+         #   print ("GBIO controlled Ralais is not working!")
         
     def getData(self):
         return self.dataStr

@@ -9,7 +9,7 @@ printMessages = False
 
 global timeTriggerSendData
 #in second
-timeTriggerSendData = 2
+timeTriggerSendData = 1
 
 global timeTriggervisualData
 #in milisecond
@@ -38,3 +38,6 @@ switchOffMaxT = 65
 global switchOffMinT
 #in °C
 switchOffMinT = 20
+
+global control_parameter
+control_parameter = ""
