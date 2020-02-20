@@ -97,13 +97,13 @@ class Gui(Frame):
         self.netConn.__exit__()
         
     def visualizationData(self):
-        #self.infoText['text'] = self.adaptDataList()
+        self.infoText['text'] = self.adaptDataList()
         self.signalText['text'] = self.netConn.getMessageServer()
         self.textFeedback['text'] = self.netConn.getFeedback()
         self.after(parameter.timeTriggervisualData, self.visualizationData)
         
     def adaptDataList(self):
-        adaptData = "{}\n\r{}\n\r{}".format(self.heatMeaters.getData(1), self.heatMeaters.getData(2), self.heatMeaters.getData(3))
+        adaptData = self.netConn.getMessage()
         return adaptData
     
     def switchOffHysteresis(self):

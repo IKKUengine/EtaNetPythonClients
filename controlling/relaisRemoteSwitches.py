@@ -26,6 +26,7 @@ class RemoteSwitches (gbioRPIConnection.OnePortGbioRpiConnection, observe.Observ
     def request(self):
         #try:
         message = parameter.control_parameter
+        print ("Länge: {:8.6f}".format(len(message)))
         if len(message) == 6:     
             print("ONOFF:")
             print (message)
