@@ -60,9 +60,10 @@ class MBusConnection(threading.Thread):
         return RequestShortFrame
         
     def getAllData(self, primeAdress):
-        print(primeAdress)
-        self.s.send(self.getDataDeviceCode(primeAdress).encode())
-        respond = self.s.recv(119)
+        #print(primeAdress)
+        message = self.getDataDeviceCode(primeAdress).encode()
+        self.s.send(message)
+        respond = self.s.recv(200)
         return respond 
     
     def setStop(self):
@@ -73,9 +74,11 @@ class MBusConnection(threading.Thread):
 
     def setExit(self):
         self.exit = False
+        self.s.close()
 
     def __exit__(self):
-        self.s.close()
+        pass
+        
 
         
 class etaNetClient(threading.Thread, observe.Observable):
@@ -84,7 +87,6 @@ class etaNetClient(threading.Thread, observe.Observable):
     stop = True
     messageServer = "NO SERVER CONNECTION!"
     feedback = "Ready to get feedback!"
-    message = ""
     
     def __init__(self, host = '192.168.178.20', port = 50005):
 
@@ -114,7 +116,7 @@ class etaNetClient(threading.Thread, observe.Observable):
         #match_number = re.compile('-?\ *[0-9]+\.?[0-9]*(?:[Ee]\ *-?\ *[0-9]+)?')
         #match_number = re.compile("[+-]? *(?:\d+(?:\.\d*)?|\.\d+)(?:[eE][+-]?\d+)?")
         powerTs = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        self.message =  "'{}' ('TimeStamp', {}) VALUES ('{}', {})".format(parameter.systemIdentifier, self.getHeaderList(), powerTs , self.getDataList()) 
+        message =  "'{}' ('TimeStamp', {}) VALUES ('{}', {})".format(parameter.systemIdentifier, self.getHeaderList(), powerTs , self.getDataList()) 
             
         try:
             newList = [] 
@@ -124,16 +126,16 @@ class etaNetClient(threading.Thread, observe.Observable):
             out = QtCore.QDataStream(block, QtCore.QIODevice.WriteOnly)
             out.setVersion(QtCore.QDataStream.Qt_4_0)  
             
-            out.writeQString(self.message)
+            out.writeQString(message)
             #print(message)
             self.s.send(block.data())
-            #print (message)
+            print (message)
            # self.messageServer = "NO SERVER CONNECTED!"
             block2 = QtCore.QByteArray()
             into = QtCore.QDataStream(block2, QtCore.QIODevice.ReadWrite)
             into.setVersion(QtCore.QDataStream.Qt_4_0)
-            messageBack = self.s.recv(1024)
-            byteMessageList = list(messageBack.decode('ascii'))
+            message = self.s.recv(1024)
+            byteMessageList = list(message.decode('ascii'))
             strMessage = ''.join(str(x) for x in byteMessageList)
             strMessageList = strMessage.split(";")
             for i in strMessageList:
@@ -179,16 +181,14 @@ class etaNetClient(threading.Thread, observe.Observable):
 
     def setExit(self):
         self.exit = False
+        self.s.close()
     
     def getMessageServer(self):
         return self.messageServer
     
-    def getMessage(self):
-        return self.message
-    
     def getFeedback(self):
         return self.feedback
+    
 
     def __exit__(self):
         self.messageServer = "NO SERVER CONNECTED!"
-        self.s.close()

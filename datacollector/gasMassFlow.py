@@ -50,6 +50,9 @@ class MassFlow(i2cAdafruitConnection.I2cAdafruitConnection, observe.Observer):
         except:
             pass
         
+    def getHeader(self):
+        return self.headerStr
+    
     def getData(self):
         return self.dataStr
                    

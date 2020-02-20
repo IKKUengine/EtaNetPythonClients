@@ -63,5 +63,8 @@ class PowerAnalyzer(rs232Connection.Rs232Connection, observe.Observer):
         except:
             print ("Power Analyser is switched off!")
             
+    def getHeader(self):
+        return self.headerStr
+    
     def getData(self):
         return self.dataStr

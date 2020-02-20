@@ -30,7 +30,7 @@ class RemoteSwitches (gbioRPIConnection.OnePortGbioRpiConnection, observe.Observ
         if len(message) == 6:     
             print("ONOFF:")
             print (message)
-            if int(message[5]) == 0:
+            if int(message[0]) == 0:
                 print("Off CHP")
                 self.setGPIOPinOff()
             else:
@@ -43,5 +43,8 @@ class RemoteSwitches (gbioRPIConnection.OnePortGbioRpiConnection, observe.Observ
         #except:
          #   print ("GBIO controlled Ralais is not working!")
         
+    def getHeader(self):
+        return self.headerStr
+    
     def getData(self):
         return self.dataStr

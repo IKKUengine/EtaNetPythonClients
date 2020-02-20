@@ -103,7 +103,7 @@ class Gui(Frame):
         self.after(parameter.timeTriggervisualData, self.visualizationData)
         
     def adaptDataList(self):
-        adaptData = self.netConn.getMessage()
+        adaptData = "{}\n{}\n\n{}\n{}\n\n{}\n{}\n\n{}\n{}\n\n{}\n{}\n\n{}\n{}".format(self.powerAn.getHeader(), self.powerAn.getData(), self.relais.getHeader(), self.relais.getData(), self.massFlow.getHeader(), self.massFlow.getData(), self.heatMeaters.getHeader1(), self.heatMeaters.getData1(), self.heatMeaters.getHeader2(), self.heatMeaters.getData2(), self.heatMeaters.getHeader3(), self.heatMeaters.getData3())
         return adaptData
     
     def switchOffHysteresis(self):

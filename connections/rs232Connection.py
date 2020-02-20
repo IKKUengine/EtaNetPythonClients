@@ -48,9 +48,7 @@ class Rs232Connection(threading.Thread):
 
     def setExit(self):
         self.exit = False
+        self.__ser.close
         
     def __exit__(self):
-        try:
-            self.__ser.close
-        except:
-            pass
+        pass

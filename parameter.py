@@ -2,7 +2,7 @@ global systemIdentifier
 systemIdentifier = 'CHP- SenerTec Dachs G5.5'
 
 global fullscreen
-fullscreen = False
+fullscreen = True
 
 global printMessages
 printMessages = False
