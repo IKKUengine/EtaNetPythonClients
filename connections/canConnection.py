@@ -12,14 +12,9 @@ class CANConnection(threading.Thread):
 # bus = can.interface.Bus(channel='can0', bustype='socketcan_native')#, bitrate=500000)
 
     def __init__(self):
-        try:
-            
-            self.ser = can.interface.Bus(channel='can0', bustype='socketcan_native')
-            self.SoC_message = can.Message(arbitration_id=0x6F1,
-                          data=[0x07, 0x03, 0x22, 0xDD, 0xC4, 0x00, 0x00, 0x00],
-                          extended_id=False)
-        except:
-            print("ECar not connected!")
+        self.ser = can.interface.Bus(channel='can0', bustype='socketcan_native')
+        self.SoC_message = can.Message(arbitration_id=0x6F1,data=[0x07, 0x03, 0x22, 0xDD, 0xC4, 0x00, 0x00, 0x00],extended_id=False)
+#         self.SoH_message = can.Message(arbitration_id=0x6F1,data=[0x07, 0x03, 0x22, 0xDD, 0x7B, 0x00, 0x00, 0x00],extended_id=False)
 
         threading.Thread.__init__(self)
         if parameter.printMessages:
@@ -43,6 +38,10 @@ class CANConnection(threading.Thread):
     
     def getMessageSoC(self):
         return self.SoC_message
+    
+#     def getMessageSoH(self):
+#         return self.SoH_message
+       
 
     def setStop(self):
         self.stop = False

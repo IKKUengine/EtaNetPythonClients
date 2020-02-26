@@ -7,15 +7,13 @@ class OnePortGbioRpiConnection(threading.Thread):
     exit = True
     stop = True
     
-    def __init__(self, portNumber1 = 24, portType1 = GPIO.OUT, portNumber2 = 23, portType2 = GPIO.IN):
+    def __init__(self, portNumber = 24, portType = GPIO.OUT):
         threading.Thread.__init__(self)
 
-        GPIO.setmode(GPIO.BOARD)
+        GPIO.setmode(GPIO.BCM)
         GPIO.setwarnings(False)
-        GPIO.setup(portNumber1, portType1)
-        GPIO.setup(portNumber2, portType2)
-        self.portNumber1 = portNumber1
-        self.portNumber2 = portNumber2
+        GPIO.setup(portNumber, portType)
+        self.portNumber = portNumber
         if parameter.printMessages:
             print("init GBIOs")
         threading.Thread.start(self)
@@ -30,20 +28,16 @@ class OnePortGbioRpiConnection(threading.Thread):
         pass
     
     def setGPIOPinOnOff(self):
-        GPIO.output(self.portNumber1, not GPIO.input(self.portNumber1))
+        GPIO.output(self.portNumber, not GPIO.input(self.portNumber))
         
     def setGPIOPinOn(self):
-        GPIO.output(self.portNumber1, 1)
+        GPIO.output(self.portNumber, 1)
         
     def setGPIOPinOff(self):
-        GPIO.output(self.portNumber1, 0)
+        GPIO.output(self.portNumber, 0)
     
-    def getGPIOPinStatus1(self):
-        status = GPIO.input(self.portNumber1)
-        return status
-        
-    def getGPIOPinStatus2(self):
-        status = GPIO.input(self.portNumber2)
+    def getGPIOPinStatus(self):
+        status = GPIO.input(self.portNumber)
         return status
     
     def setStop(self):

@@ -85,7 +85,7 @@ class etaNetClient(threading.Thread, observe.Observable):
     messageServer = "NO SERVER CONNECTION!"
     feedback = "Ready to get feedback!"
     
-    def __init__(self, host = '192.168.178.20', port = 50005):
+    def __init__(self, host = '192.168.178.24', port = 50005):
 
         self.host = host
         self.port = port

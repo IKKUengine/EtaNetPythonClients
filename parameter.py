@@ -42,3 +42,6 @@ switchOffMaxT = 65
 global switchOffMinT
 #in °C
 switchOffMinT = 20
+
+global control_parameter
+control_parameter = ""
