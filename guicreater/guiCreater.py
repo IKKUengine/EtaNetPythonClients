@@ -1,10 +1,10 @@
 
 from tkinter import *
 from connections import networkConnection as etaNet
-from datacollector import powerAnalyzer
-from datacollector import gasMassFlow
-from datacollector import heatMeter
-from controlling import relaisRemoteSwitches
+#from datacollector import powerAnalyzer
+#from datacollector import gasMassFlow
+#from datacollector import heatMeter
+#from controlling import relaisRemoteSwitches
 import parameter
 import time
 
@@ -16,10 +16,10 @@ class Gui(Frame):
 
     def __init__(self):
         self.netConn = etaNet.etaNetClient()
-        self.powerAn = powerAnalyzer.PowerAnalyzer(self.netConn)
-        self.relais = relaisRemoteSwitches.RemoteSwitches(self.netConn)        
-        self.massFlow = gasMassFlow.MassFlow(self.netConn)
-        self.heatMeaters = heatMeter.HeatMeter(self.netConn)
+        #self.powerAn = powerAnalyzer.PowerAnalyzer(self.netConn)
+        #self.relais = relaisRemoteSwitches.RemoteSwitches(self.netConn)        
+        #self.massFlow = gasMassFlow.MassFlow(self.netConn)
+        #self.heatMeaters = heatMeter.HeatMeter(self.netConn)
         # subject.notify_observers('done')
         # GUI Init
         # self.requestPowerAnalyzer()
@@ -39,7 +39,7 @@ class Gui(Frame):
         measure_menu.add_command(label="Start Measure", command=self.startMeasure)
         measure_menu.add_command(label="Stop Transfer", command=self.netConn.setStop)
         measure_menu.add_command(label="Start Transfer", command=self.netConn.setStart)
-        controlling_menu.add_command(label="On/Off CHP", command=self.relais.setGPIOPinOnOff)
+        #controlling_menu.add_command(label="On/Off CHP", command=self.relais.setGPIOPinOnOff)
         main_menu.add_command(label="Quit", command=master.destroy)
         
         self.label = Label(master, text = "IP-Address Server:")
@@ -75,26 +75,29 @@ class Gui(Frame):
 
 
     def stopMeasure(self):
-        self.powerAn.setStop()
-        self.massFlow.setStop()
-        self.heatMeaters.setStop()
-        self.relais.setStop()
+        #self.powerAn.setStop()
+        #self.massFlow.setStop()
+        #self.heatMeaters.setStop()
+        #self.relais.setStop()
+        pass
         
     def startMeasure(self):
-        self.powerAn.setStart()
-        self.massFlow.setStart()
-        self.heatMeaters.setStart()
-        self.relais.setStart()
+        #self.powerAn.setStart()
+        #self.massFlow.setStart()
+        #self.heatMeaters.setStart()
+        #self.relais.setStart()
+        pass
         
     def __exit__(self):
-        self.powerAn.setExit()
-        self.powerAn.__exit__()
-        self.massFlow.setExit()
-        self.heatMeaters.setExit()
-        self.heatMeaters.__exit__()
-        self.relais.setExit()
-        self.netConn.setExit()
-        self.netConn.__exit__()
+        #self.powerAn.setExit()
+        #self.powerAn.__exit__()
+        #self.massFlow.setExit()
+        #self.heatMeaters.setExit()
+        #self.heatMeaters.__exit__()
+        #self.relais.setExit()
+        #self.netConn.setExit()
+        #self.netConn.__exit__()
+        pass
         
     def visualizationData(self):
         self.infoText['text'] = self.adaptDataList()
@@ -103,7 +106,9 @@ class Gui(Frame):
         self.after(parameter.timeTriggervisualData, self.visualizationData)
         
     def adaptDataList(self):
-        adaptData = "{}\n{}\n\n{}\n{}\n\n{}\n{}\n\n{}\n{}\n\n{}\n{}\n\n{}\n{}".format(self.powerAn.getHeader(), self.powerAn.getData(), self.relais.getHeader(), self.relais.getData(), self.massFlow.getHeader(), self.massFlow.getData(), self.heatMeaters.getHeader1(), self.heatMeaters.getData1(), self.heatMeaters.getHeader2(), self.heatMeaters.getData2(), self.heatMeaters.getHeader3(), self.heatMeaters.getData3())
+        
+        adaptData = "Fernando at home!"
+        #adaptData = "{}\n{}\n\n{}\n{}\n\n{}\n{}\n\n{}\n{}\n\n{}\n{}\n\n{}\n{}".format(self.powerAn.getHeader(), self.powerAn.getData(), self.relais.getHeader(), self.relais.getData(), self.massFlow.getHeader(), self.massFlow.getData(), self.heatMeaters.getHeader1(), self.heatMeaters.getData1(), self.heatMeaters.getHeader2(), self.heatMeaters.getData2(), self.heatMeaters.getHeader3(), self.heatMeaters.getData3())
         return adaptData
     
     def switchOffHysteresis(self):
