@@ -1,25 +1,22 @@
 
 from tkinter import *
-from connections import networkConnection as etaNet
-#from datacollector import powerAnalyzer
-#from datacollector import gasMassFlow
-#from datacollector import heatMeter
-#from controlling import relaisRemoteSwitches
+from connections import internetConnection
+from datacollector import gpsModul
+from datacollector import temperatureSensor
+from datacollector import weatherServer
 import parameter
 import time
 
 class Gui(Frame):
-    # Members
     textPower = 'Hallo GenLab!'
     textSignal = 'Hallo GenLab!'
     textFeedback = 'Server Feedback!'
 
     def __init__(self):
-        self.netConn = etaNet.etaNetClient()
-        #self.powerAn = powerAnalyzer.PowerAnalyzer(self.netConn)
-        #self.relais = relaisRemoteSwitches.RemoteSwitches(self.netConn)        
-        #self.massFlow = gasMassFlow.MassFlow(self.netConn)
-        #self.heatMeaters = heatMeter.HeatMeter(self.netConn)
+        self.cloudConnection = internetConnection.CloudConnection()
+        self.weather = weatherServer.Weather(self.cloudConnection)
+        self.temperatureInside = temperatureSensor.TemperatureSensor(self.cloudConnection)        
+        self.gpsData = gpsModul.GpsModul(self.cloudConnection)
         # subject.notify_observers('done')
         # GUI Init
         # self.requestPowerAnalyzer()
@@ -37,8 +34,8 @@ class Gui(Frame):
         controlling_menu = Menu(menu_bar, tearoff=0)
         measure_menu.add_command(label="Stop Measure", command=self.stopMeasure)
         measure_menu.add_command(label="Start Measure", command=self.startMeasure)
-        measure_menu.add_command(label="Stop Transfer", command=self.netConn.setStop)
-        measure_menu.add_command(label="Start Transfer", command=self.netConn.setStart)
+        #measure_menu.add_command(label="Stop Transfer", command=self.netConn.setStop)
+        #measure_menu.add_command(label="Start Transfer", command=self.netConn.setStart)
         #controlling_menu.add_command(label="On/Off CHP", command=self.relais.setGPIOPinOnOff)
         main_menu.add_command(label="Quit", command=master.destroy)
         
@@ -48,7 +45,7 @@ class Gui(Frame):
         self.entry = Entry(master)
         self.entry.grid(row = 1, column = 0, sticky = W,  padx = 5, pady = 5)
         self.entry.focus_set()
-        self.entry.insert(0, self.netConn.getIP())
+        self.entry.insert(0, self.cloudConnection.getIP())
         
         self.button = Button(master, text="Set Server IP", command =self.connect)
         self.button.grid(row = 2, column = 0, sticky = W, padx = 5, pady = 5)
@@ -75,40 +72,34 @@ class Gui(Frame):
 
 
     def stopMeasure(self):
-        #self.powerAn.setStop()
-        #self.massFlow.setStop()
-        #self.heatMeaters.setStop()
-        #self.relais.setStop()
-        pass
+        self.weather.setStop()
+        self.temperatureInside.setStop()
+        self.gpsData.setStop()
         
     def startMeasure(self):
-        #self.powerAn.setStart()
-        #self.massFlow.setStart()
-        #self.heatMeaters.setStart()
-        #self.relais.setStart()
-        pass
+        self.weather.setStart()
+        self.temperatureInside.setStart()
+        self.gpsData.setStart()
         
     def __exit__(self):
-        #self.powerAn.setExit()
-        #self.powerAn.__exit__()
-        #self.massFlow.setExit()
-        #self.heatMeaters.setExit()
-        #self.heatMeaters.__exit__()
-        #self.relais.setExit()
-        #self.netConn.setExit()
-        #self.netConn.__exit__()
+        self.temperatureInside.setExit()
+        self.temperatureInside.__exit__()
+        self.weather.setExit()
+        self.gpsData.setExit()
+        self.cloudConnection.setExit()
+        self.cloudConnection.__exit__()
         pass
         
     def visualizationData(self):
         self.infoText['text'] = self.adaptDataList()
-        self.signalText['text'] = self.netConn.getMessageServer()
-        self.textFeedback['text'] = self.netConn.getFeedback()
+        self.signalText['text'] = self.cloudConnection.getMessageServer()
+        self.textFeedback['text'] = self.cloudConnection.getFeedback()
         self.after(parameter.timeTriggervisualData, self.visualizationData)
         
     def adaptDataList(self):
         
         adaptData = "Fernando at home!"
-        #adaptData = "{}\n{}\n\n{}\n{}\n\n{}\n{}\n\n{}\n{}\n\n{}\n{}\n\n{}\n{}".format(self.powerAn.getHeader(), self.powerAn.getData(), self.relais.getHeader(), self.relais.getData(), self.massFlow.getHeader(), self.massFlow.getData(), self.heatMeaters.getHeader1(), self.heatMeaters.getData1(), self.heatMeaters.getHeader2(), self.heatMeaters.getData2(), self.heatMeaters.getHeader3(), self.heatMeaters.getData3())
+        #adaptData = "{}\n{}\n\n{}\n{}\n\n{}\n{}\n\n{}\n{}\n\n{}\n{}\n\n{}\n{}".format(self.temperatureInside.getHeader(), self.weather.getData(), self.gpsData.getHeader(), self.relais.getData(), self.massFlow.getHeader(), self.massFlow.getData(), self.heatMeaters.getHeader1(), self.heatMeaters.getData1(), self.heatMeaters.getHeader2(), self.heatMeaters.getData2(), self.heatMeaters.getHeader3(), self.heatMeaters.getData3())
         return adaptData
     
     def switchOffHysteresis(self):

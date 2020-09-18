@@ -1,29 +1,21 @@
 import time
 import threading
-import serial
+import gps
 import parameter
 
-class Rs232Connection(threading.Thread):
+class GpsConnection(threading.Thread):
     
     exit = True
     stop = True
 
-    try:     
-        __ser = serial.Serial(
-             port='/dev/ttyS0',  # Open RPI buit-in serial port
-             baudrate=9600,
-             parity=serial.PARITY_NONE,
-             stopbits=serial.STOPBITS_ONE,
-             bytesize=serial.EIGHTBITS,
-             timeout=1
-         )
-    except:
-        print ("RS232-Port could not be opened!")
-
     def __init__(self):
+
         threading.Thread.__init__(self)
+
+        #Please set your gps connection init code
+        
         if parameter.printMessages:
-            print("init rs232")
+            print("init gps")
         threading.Thread.start(self)
 
     def run(self):
@@ -31,14 +23,11 @@ class Rs232Connection(threading.Thread):
         while self.exit:#threat wird erst beendet wenn aus while schleife herausgeganen wird
             if self.stop:
                 self.request()
-            time.sleep(parameter.timeTriggerPowerAnalayser)
+            time.sleep(parameter.timeTriggerGps)
             #self.lock.release()
 
     def request(self):
         pass
-
-    def getSerialPort(self):
-        return self.__ser
 
     def setStop(self):
         self.stop = False
@@ -48,7 +37,5 @@ class Rs232Connection(threading.Thread):
 
     def setExit(self):
         self.exit = False
-        self.__ser.close
-        
-    def __exit__(self):
-        pass
+
+

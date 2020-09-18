@@ -1,5 +1,5 @@
 global systemIdentifier
-systemIdentifier = 'CHP- SenerTec Dachs G5.5'
+systemIdentifier = 'GPS Tracking eCar'
 
 global fullscreen
 fullscreen = True
@@ -19,9 +19,9 @@ global timeTriggerPowerAnalayser
 #in second
 timeTriggerPowerAnalayser = 1
 
-global timeTriggerMassFlow
+global timeTriggerGps
 #in second
-timeTriggerMassFlow = 1
+timeTriggerGps = 1
 
 global timeTriggerMeterbus
 #in second
