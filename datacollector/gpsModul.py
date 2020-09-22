@@ -6,12 +6,12 @@ import datetime
 
 class GpsModul(gpsConnection.GpsConnection, observe.Observer):
 
-    dataStr = "'NaN', 'NaN', 'NaN'"
+    dataStr = "0, 0, 0"
     headerStr = "'Longitude [°]', 'Latitude [°]', 'Speed [km/h]'"
+    Longitude =[]
+    Latitude = [] 
 
     def __init__(self, observable):
-       # rs232Connection.Rs232Connection.__init__()
-        #observe.Observer.__init__(observable)
         gpsConnection.GpsConnection.__init__(self)
         observe.Observer.__init__(self, observable)
 
@@ -22,21 +22,42 @@ class GpsModul(gpsConnection.GpsConnection, observe.Observer):
       return self.headerStr
 
     def request(self):
-        try:
-            pass
-            #Please set here your gps data request code
-            #longitude
-            #latitude
-            #speed (m/s -> km/h)
-
-        except:
-            print ("GPS Sensor is switched off!")
-        try:
-            pass
-            #self.dataStr = "{:8.6f}, {:8.6f}, {:8.6f}".format(longitude, latitude, speed)       
-        except:
-            pass
+        #try:
+        #Longitude =[]
+        #Latitude = [] 
+        report = self.getReport()
+        Lat=self.getLat(report)
+        Lon=self.getLon(report)
+        Speed=self.getSpeed(report)
+        #print(Lat)
+        #print(Speed)
         
+        #if report['class'] == 'TPV':
+        #    print(">>>>>>GPS Data is shown")
+        #    #longitude
+        #    lon=report.lon
+        #    #latitude
+        #    lat=report.lat
+        #    #speed (m/s -> km/h)
+        #    speed= ((report.speed)*3600)/1000
+        if (Lat is not None) and (Lon is not None):
+
+            if (self.Latitude == []) and (self.Longitude == []):
+                self.Longitude.append(Lon)
+                self.Latitude.append(Lat)
+                self.dataStr = "{:8.6f}, {:8.6f}, {:8.6f}".format(self.Longitude[0], self.Latitude[0], Speed)
+                pass
+            else :
+                self.Longitude.append(Lon)
+                self.Latitude.append(Lat)
+        #print('GPS Location : %.5f°N, %.5f°E' %(self.Longitude[-1],self.Latitude[-1]))
+           
+                self.dataStr = "{:8.4f}, {:8.4f}, {:8.3f}".format(self.Longitude[-1], self.Latitude[-1], Speed)
+    
+        #except:
+         #   print('gps not connected')
+            
+
     def getHeader(self):
         return self.headerStr
     

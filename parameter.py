@@ -2,7 +2,7 @@ global systemIdentifier
 systemIdentifier = 'GPS Tracking eCar'
 
 global fullscreen
-fullscreen = True
+fullscreen = False
 
 global printMessages
 printMessages = False

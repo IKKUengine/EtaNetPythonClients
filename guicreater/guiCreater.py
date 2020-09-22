@@ -45,7 +45,7 @@ class Gui(Frame):
         self.entry = Entry(master)
         self.entry.grid(row = 1, column = 0, sticky = W,  padx = 5, pady = 5)
         self.entry.focus_set()
-        self.entry.insert(0, self.cloudConnection.getIP())
+        #self.entry.insert(0, self.cloudConnection.getIP())
         
         self.button = Button(master, text="Set Server IP", command =self.connect)
         self.button.grid(row = 2, column = 0, sticky = W, padx = 5, pady = 5)
@@ -62,8 +62,9 @@ class Gui(Frame):
         ipAddr = self.entry.get()
         
         try:
-            self.netConn.setIP(ipAddr)
-            print (ipAddr)
+            #self.cloudConnection.setIP(ipAddr)
+            #print (ipAddr)
+            pass
         except:
             if parameter.printMessages:
                 print ("Please switch on the Server-App!")
@@ -108,3 +109,5 @@ class Gui(Frame):
         #if self.heatMeater1.getTreturn() <= parameter.switchOffMinT and self.relais.getCHPOnOffStatus() == 0:
         #    self.relais.setRelaisCHPOn()
         self.after( 100, self.switchOffHysteresis)
+        
+

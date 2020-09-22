@@ -2,6 +2,7 @@ import time
 import threading
 import gps
 import parameter
+import socket #added
 
 class GpsConnection(threading.Thread):
     
@@ -9,14 +10,19 @@ class GpsConnection(threading.Thread):
     stop = True
 
     def __init__(self):
-
-        threading.Thread.__init__(self)
-
-        #Please set your gps connection init code
         
-        if parameter.printMessages:
-            print("init gps")
-        threading.Thread.start(self)
+        try:
+            # Listen on port 2947 (gpsd) of localhost
+            self.session = gps.gps("localhost", "2947")
+            self.session.stream(gps.WATCH_ENABLE | gps.WATCH_NEWSTYLE)
+            threading.Thread.__init__(self)        
+            threading.Thread.start(self)
+
+            #if parameter.printMessages:
+            print("socket is created")
+            
+        except:            
+            print("socket NOT created")
 
     def run(self):
         #self.lock.acquire()
@@ -25,7 +31,7 @@ class GpsConnection(threading.Thread):
                 self.request()
             time.sleep(parameter.timeTriggerGps)
             #self.lock.release()
-
+    
     def request(self):
         pass
 
@@ -38,4 +44,23 @@ class GpsConnection(threading.Thread):
     def setExit(self):
         self.exit = False
 
+    #GPS Sensor Functions
+    def getReport(self):
+        report = self.session.next()
+        return report
+
+    def getLat(self, report):
+        if report['class'] == 'TPV':
+            lat=report.lat
+            return lat
+
+    def getLon(self, report):
+        if report['class'] == 'TPV':
+            lon=report.lon
+            return lon
+    
+    def getSpeed(self, report):
+        if report['class'] == 'TPV':
+            speed=report.speed
+            return speed
 

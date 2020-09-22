@@ -9,8 +9,8 @@ import time
 class Weather(internetConnection.WeatherServer, observe.Observer):
     
     
-    dataStr = "'NaN', 'NaN'"
-    headerStr = "'Outside Temp. [°C]', 'Pressure [Pa]'"
+    dataStr = "0, 0, 0"
+    headerStr = "'Outside Temp. [°C]', 'Pressure [Pa]','WeatherDescription [ ]'"
     
     
     def __init__(self, observable):
@@ -25,18 +25,23 @@ class Weather(internetConnection.WeatherServer, observe.Observer):
       return self.headerStr
 
     def request(self):
-        print ("Weather server connection is done!")
         try:
-            pass
-            #set workflow for data reading 
+            #set workflow for data reading
+            weather=self.getAPI()
             #tempuratureOut
+            Tout = self.getTempOut(weather)
             #pressureOut
-            
-            #self.dataStr = "{:8.6f}, {:8.6f}".format(tempuratureOut, pressureOut)       
+            Pout = self.getPressure(weather)
+            #weatherDescription
+            weatherDesc = self.getWeather(weather)
+
+            print ("Weather server connection is done!")
+            self.dataStr = "{:8.2f}, {:8.2f}, {}".format(Tout, Pout,weatherDesc)       
         except:
-            pass
-        
+            print("Weather did not get data")
+    
     # set funktion here, do not forget the self
+
     def getTreturn(self):
         return self.returnT
 
