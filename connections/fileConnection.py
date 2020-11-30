@@ -2,13 +2,12 @@ import time
 import threading
 import parameter
 import glob
-import RPi.GPIO as GPIO #added
+import RPi.GPIO as GPIO 
 
 class FileConnection(threading.Thread):
     
     exit = True
     stop = True
-
 
     def __init__(self):
         threading.Thread.__init__(self)
@@ -26,18 +25,16 @@ class FileConnection(threading.Thread):
                 continue
         self.device_file = device_folder + '/w1_slave'
 
-        
         if parameter.printMessages:
             print("init file connection")
-        threading.Thread.start(self)
+        else:
+            threading.Thread.start(self)
 
     def run(self):
-        #self.lock.acquire()
         while self.exit:#threat wird erst beendet wenn aus while schleife herausgeganen wird
             if self.stop:
                 self.request()
             time.sleep(parameter.timeTriggerPowerAnalayser)
-            #self.lock.release()
 
     def request(self):
         pass

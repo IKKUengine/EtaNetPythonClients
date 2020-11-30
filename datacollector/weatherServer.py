@@ -1,22 +1,21 @@
 import parameter
 import json, requests
 from connections import internetConnection
+from connections import gpsConnection
 from observer import observe
 import datetime
 
 import time
 
-class Weather(internetConnection.WeatherServer, observe.Observer):
-    
+class Weather(internetConnection.WeatherServer, gpsConnection.GpsConnection, observe.Observer):
     
     dataStr = "0, 0, 0"
     headerStr = "'Outside Temp. [°C]', 'Pressure [Pa]','WeatherDescription [ ]'"
     
-    
     def __init__(self, observable):
         internetConnection.WeatherServer.__init__(self)
+        gpsConnection.GpsConnection.__init__(self)
         observe.Observer.__init__(self, observable)
-
 
     def notifyData(self):
       return self.dataStr
@@ -36,28 +35,13 @@ class Weather(internetConnection.WeatherServer, observe.Observer):
             weatherDesc = self.getWeather(weather)
 
             print ("Weather server connection is done!")
-            self.dataStr = "{:8.2f}, {:8.2f}, {}".format(Tout, Pout,weatherDesc)       
+            self.dataStr = "{:8.2f}, {:8.2f}, {}".format(Tout, Pout,weatherDesc)
+#             print("Weather Server: {:8.2f}, {:8.2f}, {}".format(Tout, Pout,weatherDesc) )
         except:
             print("Weather did not get data")
     
-    # set funktion here, do not forget the self
-
-    def getTreturn(self):
-        return self.returnT
-
-    def getHeader1(self):
-        return self.headerH1
-
-    def getHeader2(self):
-        return self.headerH2
+    def getHeader(self):
+        return self.header
     
-    def getHeader3(self):
-        return self.headerH3
-    
-    def getData1(self):
-        return self.data1
-    def getData2(self):
-        return self.data2
-    def getData3(self):
-        return self.data3
-        
+    def getData(self):
+        return self.data
